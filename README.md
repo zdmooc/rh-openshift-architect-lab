@@ -51,3 +51,8 @@ Chaque book contient :
 - un dossier `book/` ou `manuscript/` avec les chapitres,
 - un dossier `labs/` avec les exercices pratiques,
 - éventuellement des scripts (`scripts/`) et des schémas (`images/`).
+e dépôt contient aussi des “books” complets de préparation aux exams :
+
+- `books/ex280-book-v1/` : livre + labs pour **EX280 – OpenShift Administrator**.
+- `books/ex370-odf-book-v1/` : livre + labs pour **EX370 – OpenShift Data Foundation (ODF)**.
+- `books/ex380-openshift-automation-book-v1/` : labs structurés pour **EX380 – OpenShift Automation and Integration** (auth, backup/restore, partitionnement de cluster, GitOps, observabilité).
