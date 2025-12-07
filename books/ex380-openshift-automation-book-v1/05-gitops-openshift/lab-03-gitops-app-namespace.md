@@ -1,0 +1,8 @@
+# LAB-05-03 – GitOps pour une application
+
+Ce lab est un squelette. À compléter en suivant le modèle `LAB_TEMPLATE.md`.
+
+- Définir les objectifs pédagogiques.
+- Rédiger l’énoncé en mode “type examen”.
+- Ajouter les commandes `oc` / YAML détaillées.
+- Conclure par les points clés à retenir.
