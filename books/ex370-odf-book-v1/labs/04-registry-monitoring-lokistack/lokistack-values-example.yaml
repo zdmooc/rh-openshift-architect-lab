@@ -1,0 +1,10 @@
+loki:
+  storage:
+    type: filesystem
+    filesystem:
+      chunks_directory: /var/loki/chunks
+      rules_directory: /var/loki/rules
+persistence:
+  enabled: true
+  storageClassName: ocs-storagecluster-cephfs
+  size: 100Gi

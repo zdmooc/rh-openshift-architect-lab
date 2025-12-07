@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-cephfs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-cephfs
+  template:
+    metadata:
+      labels:
+        app: app-cephfs
+    spec:
+      containers:
+      - name: app
+        image: registry.access.redhat.com/ubi8/ubi
+        command: ["sleep", "infinity"]
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: pvc-cephfs-sample

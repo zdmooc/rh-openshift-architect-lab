@@ -1,0 +1,8 @@
+<!-- ODF Internal Mode Architecture Diagram (à éditer dans Draw.io) -->
+<!-- Représenter :
+     - Nœuds OpenShift (workers + storage)
+     - Pods ODF (rook-ceph, noobaa, etc.)
+     - Pools Ceph (RBD, CephFS, Object)
+     - StorageClass
+     - Workloads applicatifs + services de cluster (registry, monitoring, logging)
+-->

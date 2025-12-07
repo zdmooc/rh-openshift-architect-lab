@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: storage-admin
+  namespace: ex370-obc
+rules:
+- apiGroups: ["", "objectbucket.io", "snapshot.storage.k8s.io"]
+  resources: ["persistentvolumeclaims", "pods", "objectbucketclaims", "volumesnapshots"]
+  verbs: ["get", "list", "watch", "create", "delete", "patch", "update"]

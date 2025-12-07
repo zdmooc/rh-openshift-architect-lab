@@ -1,0 +1,28 @@
+apiVersion: ocs.openshift.io/v1
+kind: StorageCluster
+metadata:
+  name: ocs-storagecluster
+  namespace: openshift-storage
+spec:
+  manageNodes: false
+  resources: {}
+  encryption:
+    enable: false
+  arbiter:
+    enable: false
+  flexibleScaling: true
+  monDataDirHostPath: /var/lib/rook
+  storageDeviceSets:
+    - name: ocs-deviceset
+      count: 3
+      replica: 3
+      resources: {}
+      placement: {}
+      dataPVCTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: gp2
+          resources:
+            requests:
+              storage: 512Gi

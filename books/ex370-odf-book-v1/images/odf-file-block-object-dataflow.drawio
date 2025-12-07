@@ -1,0 +1,8 @@
+<!-- Diagramme dataflow File/Block/Object sur ODF (à éditer dans Draw.io) -->
+<!-- Montrer :
+     - Workloads
+     - PVC/PV
+     - StorageClass
+     - Pools Ceph
+     - Buckets objet
+-->

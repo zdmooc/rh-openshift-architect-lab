@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-rbd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-rbd
+  template:
+    metadata:
+      labels:
+        app: app-rbd
+    spec:
+      containers:
+      - name: app
+        image: registry.access.redhat.com/ubi8/ubi
+        command: ["sleep", "infinity"]
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: pvc-rbd-sample

@@ -1,0 +1,8 @@
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: odf-obc-sample
+  namespace: ex370-obc
+spec:
+  generateBucketName: odf-sample-bucket
+  storageClassName: openshift-storage.noobaa.io

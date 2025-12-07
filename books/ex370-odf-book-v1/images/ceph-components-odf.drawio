@@ -1,0 +1,7 @@
+<!-- Diagramme composants Ceph pour ODF (à éditer dans Draw.io) -->
+<!-- Inclure :
+     - MON, MGR, OSD
+     - CephFS, RBD, RGW
+     - NooBaa
+     - Intégration CSI/StorageClass
+-->

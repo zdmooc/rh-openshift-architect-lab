@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-clone-from-snapshot
+  namespace: ex370-capacity
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: ocs-ceph-rbd-expandable
+  dataSource:
+    name: snapshot-pvc-expand-test
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io

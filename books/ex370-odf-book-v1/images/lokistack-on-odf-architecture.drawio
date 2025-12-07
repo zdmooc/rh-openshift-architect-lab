@@ -1,0 +1,6 @@
+<!-- Diagramme LokiStack sur ODF (à éditer dans Draw.io) -->
+<!-- Montrer :
+     - Loki pods
+     - StorageClass/PVC ODF
+     - Sources de logs
+-->

@@ -1,0 +1,9 @@
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:
+  name: snapshot-pvc-expand-test
+  namespace: ex370-capacity
+spec:
+  volumeSnapshotClassName: ocs-rbd-snapclass
+  source:
+    persistentVolumeClaimName: pvc-expand-test
