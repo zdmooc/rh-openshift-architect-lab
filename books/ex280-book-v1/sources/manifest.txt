@@ -1,0 +1,12 @@
+﻿# Sources principales utilisées pour la V1
+ex_280_s_1_s_2_open_shift_lab_guide.md
+ex_280_s_3_s_4_open_shift_lab_guide.md
+ex_280_semaine_3_rollout_image_streams (1).md
+ex_280_semaine_4_id_p_rbac_quotas_helm.md
+ex_280_s_5_s_6_open_shift_lab_guide.md
+ex_280_s_5_s_6_securite_reseau_operators_troubleshooting.md
+ex_280_s_7_s_8_bootcamp_pre_exam.md
+ex_280_s_7_s_8_quotas_troubleshooting.md
+
+# Bonus (hors V1, option)
+examen_blanc_complet_ex_280_ex_288_crc.md

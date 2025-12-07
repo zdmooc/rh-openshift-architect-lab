@@ -1,0 +1,17 @@
+{
+  "name": "ex280-book-v1",
+  "version": "1.0.0",
+  "description": "Dépôt de structure (Leanpub-compatible) pour transformer tes notes EX280 en livre pédagogique (fondamentaux → labs → pre-exam).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^11.12.0",
+    "markdown-it": "^14.1.0"
+  }
+}

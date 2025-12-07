@@ -1,0 +1,11 @@
+sequenceDiagram
+  participant C as Client
+  participant R as Route (edge)
+  participant S as Service (ClusterIP)
+  participant P as Pod
+  C->>R: HTTPS request
+  R->>S: forwards (HTTP/TCP)
+  S->>P: selects endpoint (label selector)
+  P-->>S: response
+  S-->>R: response
+  R-->>C: HTTPS response

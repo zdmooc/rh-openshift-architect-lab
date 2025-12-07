@@ -1,0 +1,9 @@
+flowchart TB
+  A[Deployment created] --> B[Pod created]
+  B --> C{Scheduler finds node?}
+  C -- No --> PEND[Pending\nInsufficient CPU/Mem]
+  C -- Yes --> D[Pod Running]
+  D --> E{Runtime pressure?}
+  E -- OOM --> OOM[OOMKilled / Evicted]
+  E -- CPU limit hit --> THR[CPU throttling]
+  E -- OK --> OK[Stable]

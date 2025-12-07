@@ -1,0 +1,10 @@
+flowchart LR
+  U[User] -->|login| CLI[oc / kubectl]
+  CLI --> API[(OpenShift API)]
+  API --> NS[Project / Namespace]
+  NS --> WL[Workloads\nDeployment/Pod]
+  WL --> SVC[Service]
+  SVC --> RT[Route]
+  RT --> EXT[External Client]
+  NS --> CFG[ConfigMap / Secret]
+  NS --> SEC[RBAC + SCC]

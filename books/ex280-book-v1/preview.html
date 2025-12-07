@@ -1,0 +1,2689 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EX280 Book Preview</title>
+  <style>
+    :root{
+      --bg:#ffffff; --text:#111827; --muted:#6b7280;
+      --border:#e5e7eb; --link:#2563eb; --linkHover:#1d4ed8;
+      --sidebarBg:#ffffff; --shadow:0 1px 10px rgba(0,0,0,.06);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Segoe UI,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.6}
+
+    .layout{
+      display:grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      min-height:100vh;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position:sticky; top:0; height:100vh; overflow:auto;
+      padding:18px 14px;
+      background:var(--sidebarBg);
+      border-right:1px solid var(--border);
+      z-index:2;
+    }
+    .brand{font-weight:800;font-size:20px;margin:0 0 10px}
+    .toc-title{margin:10px 0 8px;font-weight:700}
+    .filter{
+      width:100%;padding:8px 10px;border:1px solid var(--border);
+      border-radius:10px;outline:none;margin:8px 0 12px;
+    }
+    .toc{display:flex;flex-direction:column;gap:4px;padding-bottom:14px}
+    .toc-item{
+      display:block;text-decoration:none;color:var(--link);
+      padding:6px 10px;border-radius:10px;border:1px solid transparent;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25;
+    }
+    .toc-item:hover{color:var(--linkHover);background:#f8fafc;border-color:#e2e8f0}
+    .toc-item.active{background:#eef2ff;border-color:#c7d2fe;color:#1e40af;font-weight:600}
+    .toc-item.l1{margin-left:0}
+    .toc-item.l2{margin-left:12px}
+    .toc-item.l3{margin-left:24px;color:#1f6feb}
+
+    /* Main: on centre le contenu dans la colonne pour éviter le “grand vide à droite” */
+    .main{padding:28px 34px 60px;min-width:0}
+    .content{max-width:1100px;margin:0 auto}
+    .top{display:flex;align-items:flex-end;gap:10px;margin-bottom:22px}
+    .top h1{margin:0;font-size:30px;letter-spacing:-0.02em}
+    .top .meta{color:var(--muted);font-size:13px;margin-bottom:4px}
+
+    hr{border:0;border-top:1px solid var(--border);margin:26px 0}
+    pre{background:#f6f8fa;padding:12px;overflow:auto;border-radius:12px;border:1px solid #eef2f7}
+    code{font-family:Consolas,ui-monospace,SFMono-Regular,Menlo,monospace}
+
+    img{
+      max-width:100%;height:auto;border:1px solid var(--border);
+      padding:8px;border-radius:14px;background:#fff;box-shadow:var(--shadow)
+    }
+    .img-figure{margin:14px 0 18px}
+    .img-figure figcaption{margin-top:8px;color:var(--muted);font-size:13px}
+
+    h1,h2,h3{scroll-margin-top:16px}
+    h1{font-size:28px;margin:26px 0 12px}
+    h2{font-size:22px;margin:22px 0 10px}
+    h3{font-size:18px;margin:18px 0 8px}
+    .chapter{padding-bottom:8px}
+
+    @media (max-width: 980px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--border)}
+      .main{padding:18px 16px 50px}
+      .content{max-width:unset}
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">EX280 — Preview</div>
+      <div class="toc-title">Sommaire</div>
+      <input id="filter" class="filter" placeholder="Filtrer…" />
+      <nav id="toc" class="toc">
+        <a class="toc-item l2" href="#00-intro-comment-utiliser-ce-livre" data-target="00-intro-comment-utiliser-ce-livre" title="Comment utiliser ce livre">Comment utiliser ce livre</a>
+<a class="toc-item l2" href="#00-intro-prerequis-labo" data-target="00-intro-prerequis-labo" title="Prérequis (labo)">Prérequis (labo)</a>
+<a class="toc-item l2" href="#01-f0-why-openshift-but" data-target="01-f0-why-openshift-but" title="But">But</a>
+<a class="toc-item l2" href="#01-f0-why-openshift-concepts" data-target="01-f0-why-openshift-concepts" title="Concepts">Concepts</a>
+<a class="toc-item l2" href="#01-f0-why-openshift-commandes-reflexes" data-target="01-f0-why-openshift-commandes-reflexes" title="Commandes (réflexes)">Commandes (réflexes)</a>
+<a class="toc-item l2" href="#01-f0-why-openshift-a-retenir" data-target="01-f0-why-openshift-a-retenir" title="À retenir">À retenir</a>
+<a class="toc-item l2" href="#02-f1-essentials-objects-but" data-target="02-f1-essentials-objects-but" title="But">But</a>
+<a class="toc-item l2" href="#02-f1-essentials-objects-concepts" data-target="02-f1-essentials-objects-concepts" title="Concepts">Concepts</a>
+<a class="toc-item l2" href="#02-f1-essentials-objects-schema-“de-bout-en-bout”" data-target="02-f1-essentials-objects-schema-“de-bout-en-bout”" title="Schéma “de bout en bout”">Schéma “de bout en bout”</a>
+<a class="toc-item l2" href="#02-f1-essentials-objects-verifications" data-target="02-f1-essentials-objects-verifications" title="Vérifications">Vérifications</a>
+<a class="toc-item l2" href="#03-f2-network-but" data-target="03-f2-network-but" title="But">But</a>
+<a class="toc-item l2" href="#03-f2-network-chemin-standard" data-target="03-f2-network-chemin-standard" title="Chemin standard">Chemin standard</a>
+<a class="toc-item l2" href="#03-f2-network-tls-sur-route" data-target="03-f2-network-tls-sur-route" title="TLS sur Route">TLS sur Route</a>
+<a class="toc-item l2" href="#03-f2-network-commandes-utiles" data-target="03-f2-network-commandes-utiles" title="Commandes utiles">Commandes utiles</a>
+<a class="toc-item l2" href="#03-f2-network-a-retenir" data-target="03-f2-network-a-retenir" title="À retenir">À retenir</a>
+<a class="toc-item l2" href="#04-f3-resources-quotas-but" data-target="04-f3-resources-quotas-but" title="But">But</a>
+<a class="toc-item l2" href="#04-f3-resources-quotas-limitrange-vs-resourcequota" data-target="04-f3-resources-quotas-limitrange-vs-resourcequota" title="LimitRange vs ResourceQuota">LimitRange vs ResourceQuota</a>
+<a class="toc-item l2" href="#04-f3-resources-quotas-commandes-utiles" data-target="04-f3-resources-quotas-commandes-utiles" title="Commandes utiles">Commandes utiles</a>
+<a class="toc-item l2" href="#05-f4-security-rbac-scc-but" data-target="05-f4-security-rbac-scc-but" title="But">But</a>
+<a class="toc-item l2" href="#05-f4-security-rbac-scc-rbac-qui-a-le-droit-de-faire-quoi" data-target="05-f4-security-rbac-scc-rbac-qui-a-le-droit-de-faire-quoi" title="RBAC (qui a le droit de faire quoi)">RBAC (qui a le droit de faire quoi)</a>
+<a class="toc-item l2" href="#05-f4-security-rbac-scc-serviceaccount-identite-runtime" data-target="05-f4-security-rbac-scc-serviceaccount-identite-runtime" title="ServiceAccount (identité runtime)">ServiceAccount (identité runtime)</a>
+<a class="toc-item l2" href="#05-f4-security-rbac-scc-scc-admission" data-target="05-f4-security-rbac-scc-scc-admission" title="SCC (admission)">SCC (admission)</a>
+<a class="toc-item l2" href="#05-f4-security-rbac-scc-commandes-“exam”" data-target="05-f4-security-rbac-scc-commandes-“exam”" title="Commandes “exam”">Commandes “exam”</a>
+<a class="toc-item l2" href="#06-f5-operators-olm-but" data-target="06-f5-operators-olm-but" title="But">But</a>
+<a class="toc-item l2" href="#06-f5-operators-olm-commandes-cles" data-target="06-f5-operators-olm-commandes-cles" title="Commandes clés">Commandes clés</a>
+<a class="toc-item l2" href="#07-f6-troubleshooting-but" data-target="07-f6-troubleshooting-but" title="But">But</a>
+<a class="toc-item l2" href="#07-f6-troubleshooting-routine-scriptable-mentalement" data-target="07-f6-troubleshooting-routine-scriptable-mentalement" title="Routine (scriptable mentalement)">Routine (scriptable mentalement)</a>
+<a class="toc-item l2" href="#07-f6-troubleshooting-commandes-noyau" data-target="07-f6-troubleshooting-commandes-noyau" title="Commandes noyau">Commandes noyau</a>
+<a class="toc-item l2" href="#10-s1-labs-s1-b1---cluster-login-projet" data-target="10-s1-labs-s1-b1---cluster-login-projet" title="S1.B1 - Cluster, login, projet">S1.B1 - Cluster, login, projet</a>
+<a class="toc-item l3" href="#10-s1-labs-concepts" data-target="10-s1-labs-concepts" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#10-s1-labs-commandes" data-target="10-s1-labs-commandes" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#10-s1-labs-a-retenir-ex280" data-target="10-s1-labs-a-retenir-ex280" title="À retenir (EX280)">À retenir (EX280)</a>
+<a class="toc-item l2" href="#10-s1-labs-s1-b2---deployment-simple-httpd" data-target="10-s1-labs-s1-b2---deployment-simple-httpd" title="S1.B2 - Deployment simple HTTPD">S1.B2 - Deployment simple HTTPD</a>
+<a class="toc-item l3" href="#10-s1-labs-concepts-2" data-target="10-s1-labs-concepts-2" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#10-s1-labs-commandes-2" data-target="10-s1-labs-commandes-2" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#10-s1-labs-a-retenir-ex280-2" data-target="10-s1-labs-a-retenir-ex280-2" title="À retenir (EX280)">À retenir (EX280)</a>
+<a class="toc-item l2" href="#10-s1-labs-s1-b3---service-route" data-target="10-s1-labs-s1-b3---service-route" title="S1.B3 - Service + Route">S1.B3 - Service + Route</a>
+<a class="toc-item l3" href="#10-s1-labs-concepts-3" data-target="10-s1-labs-concepts-3" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#10-s1-labs-commandes-3" data-target="10-s1-labs-commandes-3" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#10-s1-labs-a-retenir-ex280-3" data-target="10-s1-labs-a-retenir-ex280-3" title="À retenir (EX280)">À retenir (EX280)</a>
+<a class="toc-item l2" href="#10-s1-labs-s1-b4---scaling-endpoints" data-target="10-s1-labs-s1-b4---scaling-endpoints" title="S1.B4 - Scaling + Endpoints">S1.B4 - Scaling + Endpoints</a>
+<a class="toc-item l3" href="#10-s1-labs-concepts-4" data-target="10-s1-labs-concepts-4" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#10-s1-labs-commandes-4" data-target="10-s1-labs-commandes-4" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#10-s1-labs-a-retenir-ex280-4" data-target="10-s1-labs-a-retenir-ex280-4" title="À retenir (EX280)">À retenir (EX280)</a>
+<a class="toc-item l2" href="#10-s1-labs-s1-b5---configmap-secret-configuration-externe" data-target="10-s1-labs-s1-b5---configmap-secret-configuration-externe" title="S1.B5 - ConfigMap + Secret (configuration externe)">S1.B5 - ConfigMap + Secret (configuration externe)</a>
+<a class="toc-item l3" href="#10-s1-labs-concepts-5" data-target="10-s1-labs-concepts-5" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#10-s1-labs-commandes-5" data-target="10-s1-labs-commandes-5" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#10-s1-labs-a-retenir-ex280-5" data-target="10-s1-labs-a-retenir-ex280-5" title="À retenir (EX280)">À retenir (EX280)</a>
+<a class="toc-item l2" href="#10-s1-labs-s1-b6---probes-readiness-liveness" data-target="10-s1-labs-s1-b6---probes-readiness-liveness" title="S1.B6 - Probes (readiness / liveness)">S1.B6 - Probes (readiness / liveness)</a>
+<a class="toc-item l3" href="#10-s1-labs-concepts-6" data-target="10-s1-labs-concepts-6" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#10-s1-labs-commandes-tcp" data-target="10-s1-labs-commandes-tcp" title="Commandes (TCP)">Commandes (TCP)</a>
+<a class="toc-item l3" href="#10-s1-labs-a-retenir-ex280-6" data-target="10-s1-labs-a-retenir-ex280-6" title="À retenir (EX280)">À retenir (EX280)</a>
+<a class="toc-item l2" href="#10-s1-labs-s1-b7---requests-limits-ressources" data-target="10-s1-labs-s1-b7---requests-limits-ressources" title="S1.B7 - Requests / Limits (ressources)">S1.B7 - Requests / Limits (ressources)</a>
+<a class="toc-item l3" href="#10-s1-labs-concepts-7" data-target="10-s1-labs-concepts-7" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#10-s1-labs-commandes-6" data-target="10-s1-labs-commandes-6" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#10-s1-labs-a-retenir-ex280-7" data-target="10-s1-labs-a-retenir-ex280-7" title="À retenir (EX280)">À retenir (EX280)</a>
+<a class="toc-item l2" href="#10-s1-labs-s1-b8---pvc-volume-persistance" data-target="10-s1-labs-s1-b8---pvc-volume-persistance" title="S1.B8 - PVC + volume + persistance">S1.B8 - PVC + volume + persistance</a>
+<a class="toc-item l3" href="#10-s1-labs-concepts-8" data-target="10-s1-labs-concepts-8" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#10-s1-labs-yaml-pvc" data-target="10-s1-labs-yaml-pvc" title="YAML PVC">YAML PVC</a>
+<a class="toc-item l3" href="#10-s1-labs-commandes-7" data-target="10-s1-labs-commandes-7" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#10-s1-labs-test-de-persistance-principe" data-target="10-s1-labs-test-de-persistance-principe" title="Test de persistance (principe)">Test de persistance (principe)</a>
+<a class="toc-item l3" href="#10-s1-labs-a-retenir-ex280-8" data-target="10-s1-labs-a-retenir-ex280-8" title="À retenir (EX280)">À retenir (EX280)</a>
+<a class="toc-item l2" href="#11-s2-labs-s2-b1---labels-selectors" data-target="11-s2-labs-s2-b1---labels-selectors" title="S2.B1 - Labels &amp; selectors">S2.B1 - Labels &amp; selectors</a>
+<a class="toc-item l3" href="#11-s2-labs-concepts" data-target="11-s2-labs-concepts" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#11-s2-labs-commandes" data-target="11-s2-labs-commandes" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#11-s2-labs-a-retenir" data-target="11-s2-labs-a-retenir" title="À retenir">À retenir</a>
+<a class="toc-item l2" href="#11-s2-labs-s2-b2---annotations-documentation-des-objets" data-target="11-s2-labs-s2-b2---annotations-documentation-des-objets" title="S2.B2 - Annotations (documentation des objets)">S2.B2 - Annotations (documentation des objets)</a>
+<a class="toc-item l3" href="#11-s2-labs-concepts-2" data-target="11-s2-labs-concepts-2" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#11-s2-labs-commandes-2" data-target="11-s2-labs-commandes-2" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#11-s2-labs-a-retenir-2" data-target="11-s2-labs-a-retenir-2" title="À retenir">À retenir</a>
+<a class="toc-item l2" href="#11-s2-labs-s2-b3---listes-filtres-avances--l--l---field-selector" data-target="11-s2-labs-s2-b3---listes-filtres-avances--l--l---field-selector" title="S2.B3 - Listes &amp; filtres avancés (-l, -L, --field-selector)">S2.B3 - Listes &amp; filtres avancés (-l, -L, --field-selector)</a>
+<a class="toc-item l3" href="#11-s2-labs-concepts-3" data-target="11-s2-labs-concepts-3" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#11-s2-labs-commandes-3" data-target="11-s2-labs-commandes-3" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#11-s2-labs-a-retenir-3" data-target="11-s2-labs-a-retenir-3" title="À retenir">À retenir</a>
+<a class="toc-item l2" href="#11-s2-labs-s2-b4---limitrange-defaults-cpu-memoire" data-target="11-s2-labs-s2-b4---limitrange-defaults-cpu-memoire" title="S2.B4 - LimitRange : defaults CPU / mémoire">S2.B4 - LimitRange : defaults CPU / mémoire</a>
+<a class="toc-item l3" href="#11-s2-labs-concepts-4" data-target="11-s2-labs-concepts-4" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#11-s2-labs-yaml-limitrange" data-target="11-s2-labs-yaml-limitrange" title="YAML LimitRange">YAML LimitRange</a>
+<a class="toc-item l3" href="#11-s2-labs-commandes-4" data-target="11-s2-labs-commandes-4" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#11-s2-labs-tester-l’effet" data-target="11-s2-labs-tester-l’effet" title="Tester l’effet">Tester l’effet</a>
+<a class="toc-item l3" href="#11-s2-labs-a-retenir-4" data-target="11-s2-labs-a-retenir-4" title="À retenir">À retenir</a>
+<a class="toc-item l2" href="#11-s2-labs-s2-b5---resourcequota-budget-cpu-memoire-pods" data-target="11-s2-labs-s2-b5---resourcequota-budget-cpu-memoire-pods" title="S2.B5 - ResourceQuota : budget CPU / mémoire / pods">S2.B5 - ResourceQuota : budget CPU / mémoire / pods</a>
+<a class="toc-item l3" href="#11-s2-labs-concepts-5" data-target="11-s2-labs-concepts-5" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#11-s2-labs-yaml-resourcequota" data-target="11-s2-labs-yaml-resourcequota" title="YAML ResourceQuota">YAML ResourceQuota</a>
+<a class="toc-item l3" href="#11-s2-labs-commandes-5" data-target="11-s2-labs-commandes-5" title="Commandes">Commandes</a>
+<a class="toc-item l3" href="#11-s2-labs-depasser-le-quota-test" data-target="11-s2-labs-depasser-le-quota-test" title="Dépasser le quota (test)">Dépasser le quota (test)</a>
+<a class="toc-item l3" href="#11-s2-labs-liberer-des-ressources-et-voir-l’effet" data-target="11-s2-labs-liberer-des-ressources-et-voir-l’effet" title="Libérer des ressources et voir l’effet">Libérer des ressources et voir l’effet</a>
+<a class="toc-item l3" href="#11-s2-labs-a-retenir-5" data-target="11-s2-labs-a-retenir-5" title="À retenir">À retenir</a>
+<a class="toc-item l2" href="#11-s2-labs-s2-b6---synthese-semaine-2" data-target="11-s2-labs-s2-b6---synthese-semaine-2" title="S2.B6 - Synthèse Semaine 2">S2.B6 - Synthèse Semaine 2</a>
+<a class="toc-item l3" href="#11-s2-labs-a-savoir-par-cœur-version-examen" data-target="11-s2-labs-a-savoir-par-cœur-version-examen" title="À savoir par cœur (version examen)">À savoir par cœur (version examen)</a>
+<a class="toc-item l3" href="#12-s3-guide-lab-objectif-s3" data-target="12-s3-guide-lab-objectif-s3" title="Objectif S3">Objectif S3</a>
+<a class="toc-item l3" href="#12-s3-guide-lab-3-1-brique-1---rollout-rollback-d’un-deployment" data-target="12-s3-guide-lab-3-1-brique-1---rollout-rollback-d’un-deployment" title="3.1 Brique 1 - Rollout / rollback d’un Deployment">3.1 Brique 1 - Rollout / rollback d’un Deployment</a>
+<a class="toc-item l3" href="#12-s3-guide-lab-3-2-brique-2---imagestreams-pont-ex288" data-target="12-s3-guide-lab-3-2-brique-2---imagestreams-pont-ex288" title="3.2 Brique 2 - ImageStreams (pont EX288)">3.2 Brique 2 - ImageStreams (pont EX288)</a>
+<a class="toc-item l3" href="#12-s3-guide-lab-3-3-brique-3---triggers-sur-deployment" data-target="12-s3-guide-lab-3-3-brique-3---triggers-sur-deployment" title="3.3 Brique 3 - Triggers sur Deployment">3.3 Brique 3 - Triggers sur Deployment</a>
+<a class="toc-item l3" href="#12-s3-guide-lab-3-4-brique-4---kustomize-overlays-dev-stage" data-target="12-s3-guide-lab-3-4-brique-4---kustomize-overlays-dev-stage" title="3.4 Brique 4 - Kustomize (overlays dev / stage)">3.4 Brique 4 - Kustomize (overlays dev / stage)</a>
+<a class="toc-item l3" href="#12-s3-guide-lab-3-5-brique-5---templates-openshift" data-target="12-s3-guide-lab-3-5-brique-5---templates-openshift" title="3.5 Brique 5 - Templates OpenShift">3.5 Brique 5 - Templates OpenShift</a>
+<a class="toc-item l3" href="#13-s4-guide-lab-objectif-s4" data-target="13-s4-guide-lab-objectif-s4" title="Objectif S4">Objectif S4</a>
+<a class="toc-item l3" href="#13-s4-guide-lab-4-1-brique-6---idp-htpasswd-vue-admin-cluster" data-target="13-s4-guide-lab-4-1-brique-6---idp-htpasswd-vue-admin-cluster" title="4.1 Brique 6 - IdP htpasswd (vue admin cluster)">4.1 Brique 6 - IdP htpasswd (vue admin cluster)</a>
+<a class="toc-item l3" href="#13-s4-guide-lab-4-2-brique-7---users-groups-rbac-projet" data-target="13-s4-guide-lab-4-2-brique-7---users-groups-rbac-projet" title="4.2 Brique 7 - Users, groups, RBAC projet">4.2 Brique 7 - Users, groups, RBAC projet</a>
+<a class="toc-item l3" href="#13-s4-guide-lab-4-3-brique-8---clusterresourcequota-vs-resourcequota" data-target="13-s4-guide-lab-4-3-brique-8---clusterresourcequota-vs-resourcequota" title="4.3 Brique 8 - ClusterResourceQuota vs ResourceQuota">4.3 Brique 8 - ClusterResourceQuota vs ResourceQuota</a>
+<a class="toc-item l3" href="#13-s4-guide-lab-4-4-brique-9---project-template" data-target="13-s4-guide-lab-4-4-brique-9---project-template" title="4.4 Brique 9 - Project template">4.4 Brique 9 - Project template</a>
+<a class="toc-item l3" href="#13-s4-guide-lab-4-5-brique-10---helm-cote-dev-pont-ex288" data-target="13-s4-guide-lab-4-5-brique-10---helm-cote-dev-pont-ex288" title="4.5 Brique 10 - Helm côté dev (pont EX288)">4.5 Brique 10 - Helm côté dev (pont EX288)</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-semaine-5---securite-applicative-reseau" data-target="14-s5-s6-labs-semaine-5---securite-applicative-reseau" title="Semaine 5 - Sécurité applicative &amp; Réseau">Semaine 5 - Sécurité applicative &amp; Réseau</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-objectif-fin-s5" data-target="14-s5-s6-labs-objectif-fin-s5" title="Objectif fin S5">Objectif fin S5</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-1---serviceaccounts-scc-securite-des-pods" data-target="14-s5-s6-labs-brique-1---serviceaccounts-scc-securite-des-pods" title="Brique 1 - ServiceAccounts &amp; SCC (sécurité des pods)">Brique 1 - ServiceAccounts &amp; SCC (sécurité des pods)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-concepts" data-target="14-s5-s6-labs-concepts" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-commandes-de-base" data-target="14-s5-s6-labs-commandes-de-base" title="Commandes de base">Commandes de base</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-a-retenir-ex280" data-target="14-s5-s6-labs-a-retenir-ex280" title="À retenir EX280">À retenir EX280</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-2---diagnostiquer-un-pod-bloque-scc-sa" data-target="14-s5-s6-labs-brique-2---diagnostiquer-un-pod-bloque-scc-sa" title="Brique 2 - Diagnostiquer un pod bloqué (SCC / SA)">Brique 2 - Diagnostiquer un pod bloqué (SCC / SA)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-scenario-type" data-target="14-s5-s6-labs-scenario-type" title="Scénario type">Scénario type</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-checklist-cli" data-target="14-s5-s6-labs-checklist-cli" title="Checklist CLI">Checklist CLI</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-a-retenir-ex280-2" data-target="14-s5-s6-labs-a-retenir-ex280-2" title="À retenir EX280">À retenir EX280</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-3---networkpolicies-deny-all-ouvertures-ciblees" data-target="14-s5-s6-labs-brique-3---networkpolicies-deny-all-ouvertures-ciblees" title="Brique 3 - NetworkPolicies (deny-all + ouvertures ciblées)">Brique 3 - NetworkPolicies (deny-all + ouvertures ciblées)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-concepts-2" data-target="14-s5-s6-labs-concepts-2" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-preparation" data-target="14-s5-s6-labs-preparation" title="Préparation">Préparation</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-3-1-politique-deny-all-ingress" data-target="14-s5-s6-labs-3-1-politique-deny-all-ingress" title="3.1. Politique deny-all (ingress)">3.1. Politique deny-all (ingress)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-3-2-autoriser-seulement-le-trafic-vers-httpd-demo-depuis-le-meme-namespace" data-target="14-s5-s6-labs-3-2-autoriser-seulement-le-trafic-vers-httpd-demo-depuis-le-meme-namespace" title="3.2. Autoriser seulement le trafic vers httpd-demo depuis le même namespace">3.2. Autoriser seulement le trafic vers httpd-demo depuis le même namespace</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-a-retenir-ex280-3" data-target="14-s5-s6-labs-a-retenir-ex280-3" title="À retenir EX280">À retenir EX280</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-4---networkpolicies-avancees-ingress-egress" data-target="14-s5-s6-labs-brique-4---networkpolicies-avancees-ingress-egress" title="Brique 4 - NetworkPolicies avancées (ingress + egress)">Brique 4 - NetworkPolicies avancées (ingress + egress)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-exemple-autoriser-httpd-demo-a-sortir-vers-un-service-externe-dns-https" data-target="14-s5-s6-labs-exemple-autoriser-httpd-demo-a-sortir-vers-un-service-externe-dns-https" title="Exemple : autoriser httpd-demo à sortir vers un service externe (DNS + HTTPS)">Exemple : autoriser httpd-demo à sortir vers un service externe (DNS + HTTPS)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-a-retenir-ex280-4" data-target="14-s5-s6-labs-a-retenir-ex280-4" title="À retenir EX280">À retenir EX280</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-5---routes-tls" data-target="14-s5-s6-labs-brique-5---routes-tls" title="Brique 5 - Routes + TLS">Brique 5 - Routes + TLS</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-concepts-3" data-target="14-s5-s6-labs-concepts-3" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-5-1-route-http-simple-deja-vue-s1" data-target="14-s5-s6-labs-5-1-route-http-simple-deja-vue-s1" title="5.1. Route HTTP simple (déjà vue S1)">5.1. Route HTTP simple (déjà vue S1)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-5-2-route-tls-en-edge-termination" data-target="14-s5-s6-labs-5-2-route-tls-en-edge-termination" title="5.2. Route TLS en edge termination">5.2. Route TLS en edge termination</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-5-3-points-a-verifier-en-cas-de-probleme-tls" data-target="14-s5-s6-labs-5-3-points-a-verifier-en-cas-de-probleme-tls" title="5.3. Points à vérifier en cas de problème TLS">5.3. Points à vérifier en cas de problème TLS</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-a-retenir-ex280-5" data-target="14-s5-s6-labs-a-retenir-ex280-5" title="À retenir EX280">À retenir EX280</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-6---exposition-non-http-vue-d’ensemble" data-target="14-s5-s6-labs-brique-6---exposition-non-http-vue-d’ensemble" title="Brique 6 - Exposition non-HTTP (vue d’ensemble)">Brique 6 - Exposition non-HTTP (vue d’ensemble)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-concepts-4" data-target="14-s5-s6-labs-concepts-4" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-exemple-rapide-mode-theorie-pratique-si-active" data-target="14-s5-s6-labs-exemple-rapide-mode-theorie-pratique-si-active" title="Exemple rapide (mode théorie/pratique si activé)">Exemple rapide (mode théorie/pratique si activé)</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-synthese-semaine-5" data-target="14-s5-s6-labs-synthese-semaine-5" title="Synthèse Semaine 5">Synthèse Semaine 5</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-semaine-6---operators-troubleshooting-structure-tekton-pont-ex288" data-target="14-s5-s6-labs-semaine-6---operators-troubleshooting-structure-tekton-pont-ex288" title="Semaine 6 - Operators, Troubleshooting structuré &amp; Tekton (pont EX288)">Semaine 6 - Operators, Troubleshooting structuré &amp; Tekton (pont EX288)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-objectif-fin-s6" data-target="14-s5-s6-labs-objectif-fin-s6" title="Objectif fin S6">Objectif fin S6</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-7---olm-operatorhub-installation-d’un-operator" data-target="14-s5-s6-labs-brique-7---olm-operatorhub-installation-d’un-operator" title="Brique 7 - OLM / OperatorHub : installation d’un Operator">Brique 7 - OLM / OperatorHub : installation d’un Operator</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-concepts-5" data-target="14-s5-s6-labs-concepts-5" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-exemple-verifier-les-operators-deja-presents" data-target="14-s5-s6-labs-exemple-verifier-les-operators-deja-presents" title="Exemple : vérifier les Operators déjà présents">Exemple : vérifier les Operators déjà présents</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-exemple-d’installation-modele-generique" data-target="14-s5-s6-labs-exemple-d’installation-modele-generique" title="Exemple d’installation (modèle générique)">Exemple d’installation (modèle générique)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-a-retenir-ex280-6" data-target="14-s5-s6-labs-a-retenir-ex280-6" title="À retenir EX280">À retenir EX280</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-8---crd-cr-utiliser-l’operator" data-target="14-s5-s6-labs-brique-8---crd-cr-utiliser-l’operator" title="Brique 8 - CRD / CR : utiliser l’Operator">Brique 8 - CRD / CR : utiliser l’Operator</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-concepts-6" data-target="14-s5-s6-labs-concepts-6" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-verifier-les-crd" data-target="14-s5-s6-labs-verifier-les-crd" title="Vérifier les CRD">Vérifier les CRD</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-exemple-avec-openshift-pipelines-tekton---si-deja-present" data-target="14-s5-s6-labs-exemple-avec-openshift-pipelines-tekton---si-deja-present" title="Exemple avec OpenShift Pipelines (Tekton) - si déjà présent">Exemple avec OpenShift Pipelines (Tekton) - si déjà présent</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-a-retenir-ex280-ex288" data-target="14-s5-s6-labs-a-retenir-ex280-ex288" title="À retenir EX280/EX288">À retenir EX280/EX288</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-9---troubleshooting-structure-playbook" data-target="14-s5-s6-labs-brique-9---troubleshooting-structure-playbook" title="Brique 9 - Troubleshooting structuré (Playbook)">Brique 9 - Troubleshooting structuré (Playbook)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-9-1-probleme-image-imagepullbackoff" data-target="14-s5-s6-labs-9-1-probleme-image-imagepullbackoff" title="9.1. Problème image (ImagePullBackOff)">9.1. Problème image (ImagePullBackOff)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-9-2-probleme-quota-exceeded-quota" data-target="14-s5-s6-labs-9-2-probleme-quota-exceeded-quota" title="9.2. Problème quota (exceeded quota)">9.2. Problème quota (exceeded quota)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-9-3-probleme-scc-createcontainererror-permission-denied" data-target="14-s5-s6-labs-9-3-probleme-scc-createcontainererror-permission-denied" title="9.3. Problème SCC (CreateContainerError / permission denied)">9.3. Problème SCC (CreateContainerError / permission denied)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-9-4-probleme-networkpolicy-pod-qui-ne-parle-plus" data-target="14-s5-s6-labs-9-4-probleme-networkpolicy-pod-qui-ne-parle-plus" title="9.4. Problème NetworkPolicy (pod qui ne parle plus)">9.4. Problème NetworkPolicy (pod qui ne parle plus)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-9-5-probleme-route-tls" data-target="14-s5-s6-labs-9-5-probleme-route-tls" title="9.5. Problème Route / TLS">9.5. Problème Route / TLS</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-a-retenir" data-target="14-s5-s6-labs-a-retenir" title="À retenir">À retenir</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-brique-10---tekton-openshift-pipelines-pont-ex288" data-target="14-s5-s6-labs-brique-10---tekton-openshift-pipelines-pont-ex288" title="Brique 10 - Tekton / OpenShift Pipelines (pont EX288)">Brique 10 - Tekton / OpenShift Pipelines (pont EX288)</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-concepts-7" data-target="14-s5-s6-labs-concepts-7" title="Concepts">Concepts</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-namespace-ci-cd" data-target="14-s5-s6-labs-namespace-ci-cd" title="Namespace CI/CD">Namespace CI/CD</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-exemple-de-task-simple" data-target="14-s5-s6-labs-exemple-de-task-simple" title="Exemple de Task simple">Exemple de Task simple</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-taskrun-pour-executer-la-task" data-target="14-s5-s6-labs-taskrun-pour-executer-la-task" title="TaskRun pour exécuter la Task">TaskRun pour exécuter la Task</a>
+<a class="toc-item l3" href="#14-s5-s6-labs-a-retenir-ex288" data-target="14-s5-s6-labs-a-retenir-ex288" title="À retenir EX288">À retenir EX288</a>
+<a class="toc-item l2" href="#14-s5-s6-labs-synthese-semaine-6" data-target="14-s5-s6-labs-synthese-semaine-6" title="Synthèse Semaine 6">Synthèse Semaine 6</a>
+<a class="toc-item l2" href="#15-s7-bootcamp-organisation" data-target="15-s7-bootcamp-organisation" title="Organisation">Organisation</a>
+<a class="toc-item l2" href="#15-s7-bootcamp-brique-1---scenarios-“users-groups-rbac”" data-target="15-s7-bootcamp-brique-1---scenarios-“users-groups-rbac”" title="Brique 1 - Scénarios “Users/Groups/RBAC”">Brique 1 - Scénarios “Users/Groups/RBAC”</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-1-1-concepts" data-target="15-s7-bootcamp-1-1-concepts" title="1.1. Concepts">1.1. Concepts</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-1-2-exemple-de-scenario" data-target="15-s7-bootcamp-1-2-exemple-de-scenario" title="1.2. Exemple de scénario">1.2. Exemple de scénario</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-1-3-commandes-et-reflexes" data-target="15-s7-bootcamp-1-3-commandes-et-reflexes" title="1.3. Commandes et réflexes">1.3. Commandes et réflexes</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-1-4-a-retenir-ex280" data-target="15-s7-bootcamp-1-4-a-retenir-ex280" title="1.4. À retenir EX280">1.4. À retenir EX280</a>
+<a class="toc-item l2" href="#15-s7-bootcamp-brique-2---scenarios-“scc-serviceaccount”" data-target="15-s7-bootcamp-brique-2---scenarios-“scc-serviceaccount”" title="Brique 2 - Scénarios “SCC / ServiceAccount”">Brique 2 - Scénarios “SCC / ServiceAccount”</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-2-1-concepts" data-target="15-s7-bootcamp-2-1-concepts" title="2.1. Concepts">2.1. Concepts</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-2-2-exemple-de-scenario" data-target="15-s7-bootcamp-2-2-exemple-de-scenario" title="2.2. Exemple de scénario">2.2. Exemple de scénario</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-2-3-commandes-et-reflexes" data-target="15-s7-bootcamp-2-3-commandes-et-reflexes" title="2.3. Commandes et réflexes">2.3. Commandes et réflexes</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-2-4-a-retenir-ex280" data-target="15-s7-bootcamp-2-4-a-retenir-ex280" title="2.4. À retenir EX280">2.4. À retenir EX280</a>
+<a class="toc-item l2" href="#15-s7-bootcamp-brique-3---scenarios-“quotas-limitrange”" data-target="15-s7-bootcamp-brique-3---scenarios-“quotas-limitrange”" title="Brique 3 - Scénarios “Quotas / LimitRange”">Brique 3 - Scénarios “Quotas / LimitRange”</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-3-1-concepts" data-target="15-s7-bootcamp-3-1-concepts" title="3.1. Concepts">3.1. Concepts</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-3-2-exemple-de-scenario" data-target="15-s7-bootcamp-3-2-exemple-de-scenario" title="3.2. Exemple de scénario">3.2. Exemple de scénario</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-3-3-commandes-et-reflexes" data-target="15-s7-bootcamp-3-3-commandes-et-reflexes" title="3.3. Commandes et réflexes">3.3. Commandes et réflexes</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-3-4-a-retenir-ex280" data-target="15-s7-bootcamp-3-4-a-retenir-ex280" title="3.4. À retenir EX280">3.4. À retenir EX280</a>
+<a class="toc-item l2" href="#15-s7-bootcamp-brique-4---scenarios-“networkpolicy”" data-target="15-s7-bootcamp-brique-4---scenarios-“networkpolicy”" title="Brique 4 - Scénarios “NetworkPolicy”">Brique 4 - Scénarios “NetworkPolicy”</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-4-1-concepts" data-target="15-s7-bootcamp-4-1-concepts" title="4.1. Concepts">4.1. Concepts</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-4-2-exemple-de-scenario" data-target="15-s7-bootcamp-4-2-exemple-de-scenario" title="4.2. Exemple de scénario">4.2. Exemple de scénario</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-4-3-commandes-et-reflexes" data-target="15-s7-bootcamp-4-3-commandes-et-reflexes" title="4.3. Commandes et réflexes">4.3. Commandes et réflexes</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-4-4-a-retenir-ex280" data-target="15-s7-bootcamp-4-4-a-retenir-ex280" title="4.4. À retenir EX280">4.4. À retenir EX280</a>
+<a class="toc-item l2" href="#15-s7-bootcamp-brique-5---scenarios-“routes-tls-services”" data-target="15-s7-bootcamp-brique-5---scenarios-“routes-tls-services”" title="Brique 5 - Scénarios “Routes / TLS / Services”">Brique 5 - Scénarios “Routes / TLS / Services”</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-5-1-concepts" data-target="15-s7-bootcamp-5-1-concepts" title="5.1. Concepts">5.1. Concepts</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-5-2-exemple-de-scenario" data-target="15-s7-bootcamp-5-2-exemple-de-scenario" title="5.2. Exemple de scénario">5.2. Exemple de scénario</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-5-3-commandes-et-reflexes" data-target="15-s7-bootcamp-5-3-commandes-et-reflexes" title="5.3. Commandes et réflexes">5.3. Commandes et réflexes</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-5-4-a-retenir-ex280" data-target="15-s7-bootcamp-5-4-a-retenir-ex280" title="5.4. À retenir EX280">5.4. À retenir EX280</a>
+<a class="toc-item l2" href="#15-s7-bootcamp-brique-6---scenarios-“pv-pvc-statefulset”" data-target="15-s7-bootcamp-brique-6---scenarios-“pv-pvc-statefulset”" title="Brique 6 - Scénarios “PV/PVC + StatefulSet”">Brique 6 - Scénarios “PV/PVC + StatefulSet”</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-6-1-concepts" data-target="15-s7-bootcamp-6-1-concepts" title="6.1. Concepts">6.1. Concepts</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-6-2-exemple-de-scenario" data-target="15-s7-bootcamp-6-2-exemple-de-scenario" title="6.2. Exemple de scénario">6.2. Exemple de scénario</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-6-3-commandes-et-reflexes" data-target="15-s7-bootcamp-6-3-commandes-et-reflexes" title="6.3. Commandes et réflexes">6.3. Commandes et réflexes</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-6-4-a-retenir-ex280" data-target="15-s7-bootcamp-6-4-a-retenir-ex280" title="6.4. À retenir EX280">6.4. À retenir EX280</a>
+<a class="toc-item l2" href="#15-s7-bootcamp-brique-7---scenarios-“update-rollback”" data-target="15-s7-bootcamp-brique-7---scenarios-“update-rollback”" title="Brique 7 - Scénarios “Update / Rollback”">Brique 7 - Scénarios “Update / Rollback”</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-7-1-concepts" data-target="15-s7-bootcamp-7-1-concepts" title="7.1. Concepts">7.1. Concepts</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-7-2-exemple-de-scenario" data-target="15-s7-bootcamp-7-2-exemple-de-scenario" title="7.2. Exemple de scénario">7.2. Exemple de scénario</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-7-3-commandes-et-reflexes" data-target="15-s7-bootcamp-7-3-commandes-et-reflexes" title="7.3. Commandes et réflexes">7.3. Commandes et réflexes</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-7-4-a-retenir-ex280" data-target="15-s7-bootcamp-7-4-a-retenir-ex280" title="7.4. À retenir EX280">7.4. À retenir EX280</a>
+<a class="toc-item l2" href="#15-s7-bootcamp-brique-8---scenario-“build-from-git-template-imagestream”-pont-ex288" data-target="15-s7-bootcamp-brique-8---scenario-“build-from-git-template-imagestream”-pont-ex288" title="Brique 8 - Scénario “Build from Git + template/imagestream” (pont EX288)">Brique 8 - Scénario “Build from Git + template/imagestream” (pont EX288)</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-8-1-concepts" data-target="15-s7-bootcamp-8-1-concepts" title="8.1. Concepts">8.1. Concepts</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-8-2-exemple-de-scenario" data-target="15-s7-bootcamp-8-2-exemple-de-scenario" title="8.2. Exemple de scénario">8.2. Exemple de scénario</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-8-3-commandes-et-reflexes" data-target="15-s7-bootcamp-8-3-commandes-et-reflexes" title="8.3. Commandes et réflexes">8.3. Commandes et réflexes</a>
+<a class="toc-item l3" href="#15-s7-bootcamp-8-4-a-retenir-ex288" data-target="15-s7-bootcamp-8-4-a-retenir-ex288" title="8.4. À retenir EX288">8.4. À retenir EX288</a>
+<a class="toc-item l2" href="#16-s8-preexam-examblanc-organisation" data-target="16-s8-preexam-examblanc-organisation" title="Organisation">Organisation</a>
+<a class="toc-item l2" href="#16-s8-preexam-examblanc-brique-9---scenarios-“chaos”-j1-j3" data-target="16-s8-preexam-examblanc-brique-9---scenarios-“chaos”-j1-j3" title="Brique 9 - Scénarios “Chaos” (J1-J3)">Brique 9 - Scénarios “Chaos” (J1-J3)</a>
+<a class="toc-item l3" href="#16-s8-preexam-examblanc-9-1-principe" data-target="16-s8-preexam-examblanc-9-1-principe" title="9.1. Principe">9.1. Principe</a>
+<a class="toc-item l3" href="#16-s8-preexam-examblanc-9-2-checklist-typique-par-scenario" data-target="16-s8-preexam-examblanc-9-2-checklist-typique-par-scenario" title="9.2. Checklist typique par scénario">9.2. Checklist typique par scénario</a>
+<a class="toc-item l3" href="#16-s8-preexam-examblanc-9-3-objectif" data-target="16-s8-preexam-examblanc-9-3-objectif" title="9.3. Objectif">9.3. Objectif</a>
+<a class="toc-item l2" href="#16-s8-preexam-examblanc-brique-10---examens-blancs-j4-j5" data-target="16-s8-preexam-examblanc-brique-10---examens-blancs-j4-j5" title="Brique 10 - Examens blancs (J4-J5)">Brique 10 - Examens blancs (J4-J5)</a>
+<a class="toc-item l3" href="#16-s8-preexam-examblanc-10-1-format-suggere" data-target="16-s8-preexam-examblanc-10-1-format-suggere" title="10.1. Format suggéré">10.1. Format suggéré</a>
+<a class="toc-item l3" href="#16-s8-preexam-examblanc-10-2-strategie-pendant-l’examen-blanc" data-target="16-s8-preexam-examblanc-10-2-strategie-pendant-l’examen-blanc" title="10.2. Stratégie pendant l’examen blanc">10.2. Stratégie pendant l’examen blanc</a>
+<a class="toc-item l2" href="#16-s8-preexam-examblanc-brique-11---consolidation-j6" data-target="16-s8-preexam-examblanc-brique-11---consolidation-j6" title="Brique 11 - Consolidation (J6)">Brique 11 - Consolidation (J6)</a>
+<a class="toc-item l3" href="#16-s8-preexam-examblanc-11-1-fiches-de-synthese-a-preparer" data-target="16-s8-preexam-examblanc-11-1-fiches-de-synthese-a-preparer" title="11.1. Fiches de synthèse à préparer">11.1. Fiches de synthèse à préparer</a>
+<a class="toc-item l2" href="#16-s8-preexam-examblanc-brique-12---repetition-finale-j7" data-target="16-s8-preexam-examblanc-brique-12---repetition-finale-j7" title="Brique 12 - Répétition finale (J7)">Brique 12 - Répétition finale (J7)</a>
+<a class="toc-item l3" href="#16-s8-preexam-examblanc-12-1-scenario-unique-complet" data-target="16-s8-preexam-examblanc-12-1-scenario-unique-complet" title="12.1. Scénario unique complet">12.1. Scénario unique complet</a>
+<a class="toc-item l3" href="#16-s8-preexam-examblanc-12-2-objectif" data-target="16-s8-preexam-examblanc-12-2-objectif" title="12.2. Objectif">12.2. Objectif</a>
+<a class="toc-item l2" href="#16-s8-preexam-examblanc-mantra-final" data-target="16-s8-preexam-examblanc-mantra-final" title="Mantra final">Mantra final</a>
+<a class="toc-item l2" href="#90-annexes-annexe-a---reflexes-s5-s6-securite-reseau-operators-troubleshooting" data-target="90-annexes-annexe-a---reflexes-s5-s6-securite-reseau-operators-troubleshooting" title="Annexe A - Réflexes S5-S6 (sécurité/réseau/operators/troubleshooting)">Annexe A - Réflexes S5-S6 (sécurité/réseau/operators/troubleshooting)</a>
+<a class="toc-item l2" href="#90-annexes-annexe-b---checklist-mentale-s3-s4" data-target="90-annexes-annexe-b---checklist-mentale-s3-s4" title="Annexe B - Checklist mentale S3-S4">Annexe B - Checklist mentale S3-S4</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="content">
+        <div class="top">
+          <h1>Lecture locale</h1>
+          <div class="meta">preview.html (généré depuis Book.txt)</div>
+        </div>
+
+        <section class="chapter">
+<hr />
+<p># EX280 (OpenShift) - Guide pratique et bootcamp CLI-first</p>
+<blockquote>
+<p><strong>Indépendant / non affilié</strong> : ce livre n’est pas un contenu officiel Red Hat.
+Il ne contient aucune question/sujet d’examen réel ; uniquement des labs, méthodes et diagnostics.</p>
+</blockquote>
+<h2 id="00-intro-comment-utiliser-ce-livre">Comment utiliser ce livre</h2>
+<ul>
+<li>Chaque chapitre suit le format : <strong>But → Concepts → Commandes → Vérifications → À retenir</strong>.</li>
+<li>Les blocs <code>oc</code> sont faits pour être copiés/collés et adaptés à ton namespace.</li>
+<li>Les <em>Exam Drills</em> (S7-S8) sont à faire <strong>chronométrés</strong>.</li>
+</ul>
+<h2 id="00-intro-prerequis-labo">Prérequis (labo)</h2>
+<ul>
+<li>Accès à un cluster OpenShift (CRC / sandbox) + CLI <code>oc</code></li>
+<li>Un projet de travail (ex: <code>ex280-lab02</code>) et des droits suffisants selon les chapitres</li>
+</ul>
+<p><figure class="img-figure"><img src="resources/images/fig-01-overview.svg" alt="Figure 1 - Vue d’ensemble : du compte utilisateur jusqu’à l’accès externe"><figcaption>Figure 1 - Vue d’ensemble : du compte utilisateur jusqu’à l’accès externe</figcaption></figure></p>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Chapitre 0 - Pourquoi OpenShift et comment raisonner “projet/namespace”</p>
+<h2 id="01-f0-why-openshift-but">But</h2>
+<p>Comprendre le modèle OpenShift pour ne jamais “se perdre” pendant les labs et l’examen.</p>
+<h2 id="01-f0-why-openshift-concepts">Concepts</h2>
+<ul>
+<li>Cluster / API / contexte <code>oc</code></li>
+<li>Project = Namespace (avec des politiques OpenShift)</li>
+<li>Workloads, Services, Routes</li>
+</ul>
+<p><figure class="img-figure"><img src="resources/images/fig-01-overview.svg" alt="Figure 1 - Vue d’ensemble : du compte utilisateur jusqu’à l’accès externe"><figcaption>Figure 1 - Vue d’ensemble : du compte utilisateur jusqu’à l’accès externe</figcaption></figure></p>
+<h2 id="01-f0-why-openshift-commandes-reflexes">Commandes (réflexes)</h2>
+<pre><code class="language-bash">oc whoami
+oc project
+oc projects
+oc get nodes
+oc api-resources --namespaced=true
+</code></pre>
+<h2 id="01-f0-why-openshift-a-retenir">À retenir</h2>
+<ul>
+<li>Vérifier son <strong>projet courant</strong> avant toute action.</li>
+</ul>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Chapitre 1 - Objets essentiels : modèle mental</p>
+<h2 id="02-f1-essentials-objects-but">But</h2>
+<p>Savoir ce que tu manipules (et pourquoi) : Pod, Deployment, Service, Route, ConfigMap, Secret.</p>
+<p><figure class="img-figure"><img src="resources/images/fig-01-overview.svg" alt="Figure 2 - Objets de base et rôle de chacun"><figcaption>Figure 2 - Objets de base et rôle de chacun</figcaption></figure></p>
+<h2 id="02-f1-essentials-objects-concepts">Concepts</h2>
+<ul>
+<li>Deployment gère le cycle de vie ; Pods sont éphémères</li>
+<li>Service donne un point d’accès stable</li>
+<li>Route expose hors cluster (HTTP/HTTPS)</li>
+<li>ConfigMap/Secret externalisent config et credentials</li>
+</ul>
+<h2 id="02-f1-essentials-objects-schema-“de-bout-en-bout”">Schéma “de bout en bout”</h2>
+<p><figure class="img-figure"><img src="resources/images/fig-03-deploy-workflow.svg" alt="Figure 3 - Du manifeste au pod prêt"><figcaption>Figure 3 - Du manifeste au pod prêt</figcaption></figure></p>
+<h2 id="02-f1-essentials-objects-verifications">Vérifications</h2>
+<pre><code class="language-bash">oc get deploy,rs,pod,svc,route
+oc describe pod &lt;pod&gt;
+</code></pre>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Chapitre 2 - Réseau : du Pod à Internet</p>
+<h2 id="03-f2-network-but">But</h2>
+<p>Maîtriser les chemins réseau les plus probables à l’examen.</p>
+<h2 id="03-f2-network-chemin-standard">Chemin standard</h2>
+<p><figure class="img-figure"><img src="resources/images/fig-04-pod-svc-route.svg" alt="Figure 4 - Chemin réseau standard en OpenShift (Pod → Service → Route)"><figcaption>Figure 4 - Chemin réseau standard en OpenShift (Pod → Service → Route)</figcaption></figure></p>
+<h2 id="03-f2-network-tls-sur-route">TLS sur Route</h2>
+<p><figure class="img-figure"><img src="resources/images/fig-04-pod-svc-route.svg" alt="Figure 5 - Terminaison TLS selon le type de Route"><figcaption>Figure 5 - Terminaison TLS selon le type de Route</figcaption></figure></p>
+<h2 id="03-f2-network-commandes-utiles">Commandes utiles</h2>
+<pre><code class="language-bash">oc get svc,route,endpoints,endpointslices
+oc describe route &lt;name&gt;
+oc rsh &lt;pod&gt; -- curl -sS http://&lt;svc&gt;:&lt;port&gt;/
+</code></pre>
+<h2 id="03-f2-network-a-retenir">À retenir</h2>
+<ul>
+<li>Si l’externe ne répond pas : vérifier <strong>Route → Service → Endpoints → Pod</strong>.</li>
+</ul>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Chapitre 3 - Ressources : requests/limits, LimitRange, ResourceQuota</p>
+<h2 id="04-f3-resources-quotas-but">But</h2>
+<p>Comprendre les échecs “Pending/quota exceeded/OOMKilled” sans perdre de temps.</p>
+<p><figure class="img-figure"><img src="resources/images/fig-07-requests-limits.svg" alt="Figure 7 - Requests et placement ; limits et contraintes d’exécution"><figcaption>Figure 7 - Requests et placement ; limits et contraintes d’exécution</figcaption></figure></p>
+<h2 id="04-f3-resources-quotas-limitrange-vs-resourcequota">LimitRange vs ResourceQuota</h2>
+<p><figure class="img-figure"><img src="resources/images/fig-09-lr-vs-rq.svg" alt="Figure 9 - LimitRange (défauts) vs ResourceQuota (budget)"><figcaption>Figure 9 - LimitRange (défauts) vs ResourceQuota (budget)</figcaption></figure></p>
+<h2 id="04-f3-resources-quotas-commandes-utiles">Commandes utiles</h2>
+<pre><code class="language-bash">oc get limitrange,resourcequota
+oc describe resourcequota &lt;name&gt;
+oc describe pod &lt;pod&gt;
+</code></pre>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Chapitre 4 - Sécurité : RBAC, ServiceAccount, SCC</p>
+<h2 id="05-f4-security-rbac-scc-but">But</h2>
+<p>Savoir pourquoi un accès est refusé (RBAC) ou pourquoi un pod ne démarre pas (SCC).</p>
+<h2 id="05-f4-security-rbac-scc-rbac-qui-a-le-droit-de-faire-quoi">RBAC (qui a le droit de faire quoi)</h2>
+<p><figure class="img-figure"><img src="resources/images/fig-10-rbac.svg" alt="Figure 10 - Autorisations RBAC dans un namespace"><figcaption>Figure 10 - Autorisations RBAC dans un namespace</figcaption></figure></p>
+<h2 id="05-f4-security-rbac-scc-serviceaccount-identite-runtime">ServiceAccount (identité runtime)</h2>
+<p><figure class="img-figure"><img src="resources/images/fig-10-rbac.svg" alt="Figure 12 - Identité runtime : ServiceAccount attaché au pod"><figcaption>Figure 12 - Identité runtime : ServiceAccount attaché au pod</figcaption></figure></p>
+<h2 id="05-f4-security-rbac-scc-scc-admission">SCC (admission)</h2>
+<p><figure class="img-figure"><img src="resources/images/fig-13-scc.svg" alt="Figure 13 - Pourquoi un pod est refusé : SCC et contraintes"><figcaption>Figure 13 - Pourquoi un pod est refusé : SCC et contraintes</figcaption></figure></p>
+<h2 id="05-f4-security-rbac-scc-commandes-“exam”">Commandes “exam”</h2>
+<pre><code class="language-bash">oc auth can-i get pods -n &lt;ns&gt;
+oc get rolebinding,clusterrolebinding -n &lt;ns&gt;
+oc get pod &lt;pod&gt; -o yaml | sed -n '1,120p'
+oc describe pod &lt;pod&gt; | sed -n '1,120p'
+</code></pre>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Chapitre 5 - Operators &amp; OLM : comprendre la mécanique</p>
+<h2 id="06-f5-operators-olm-but">But</h2>
+<p>Installer, lire et dépanner un Operator (Subscription/CSV/CRD/CR).</p>
+<p><figure class="img-figure"><img src="resources/images/fig-15-olm-lifecycle.svg" alt="Figure 15 - Cycle de vie Operator : de l’abonnement à la ressource"><figcaption>Figure 15 - Cycle de vie Operator : de l’abonnement à la ressource</figcaption></figure></p>
+<h2 id="06-f5-operators-olm-commandes-cles">Commandes clés</h2>
+<pre><code class="language-bash">oc get operatorgroups,subscriptions,csv -n &lt;ns&gt;
+oc get crd | head
+oc describe csv &lt;name&gt; -n &lt;ns&gt;
+</code></pre>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Chapitre 6 - Troubleshooting : la routine unique (mode examen)</p>
+<h2 id="07-f6-troubleshooting-but">But</h2>
+<p>Avoir une méthode stable et rapide quel que soit le symptôme.</p>
+<p><figure class="img-figure"><img src="resources/images/fig-16-troubleshooting-routine.svg" alt="Figure 16 - Routine unique de diagnostic"><figcaption>Figure 16 - Routine unique de diagnostic</figcaption></figure></p>
+<h2 id="07-f6-troubleshooting-routine-scriptable-mentalement">Routine (scriptable mentalement)</h2>
+<ol>
+<li>Confirmer contexte/projet</li>
+<li>Lire events + describe</li>
+<li>Logs (et <code>--previous</code>)</li>
+<li>Réseau : svc/route/endpoints/DNS/NetPol</li>
+<li>Corriger minimalement</li>
+<li>Re-tester + re-check</li>
+</ol>
+<h2 id="07-f6-troubleshooting-commandes-noyau">Commandes noyau</h2>
+<pre><code class="language-bash">oc project
+oc get pods -o wide
+oc get events --sort-by=.lastTimestamp | tail -n 30
+oc describe pod &lt;pod&gt;
+oc logs &lt;pod&gt; --all-containers --tail=200
+oc logs &lt;pod&gt; --previous --all-containers --tail=200
+</code></pre>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Semaine 1 - Socle OpenShift / K8s</p>
+<h2 id="10-s1-labs-s1-b1---cluster-login-projet">S1.B1 - Cluster, login, projet</h2>
+<p><strong>But</strong> : se connecter au cluster, vérifier les nœuds, travailler dans le bon projet.</p>
+<h3 id="10-s1-labs-concepts">Concepts</h3>
+<ul>
+<li>Un <strong>contexte <code>oc</code></strong> = cluster + utilisateur + projet courant.</li>
+<li>Un <strong>projet</strong> OpenShift = un <strong>namespace</strong> Kubernetes.</li>
+</ul>
+<h3 id="10-s1-labs-commandes">Commandes</h3>
+<pre><code class="language-bash"># Connexion (exemple)
+oc login -u developer https://api.crc.testing:6443
+# ou pour l’admin
+oc login -u kubeadmin https://api.crc.testing:6443
+
+# Voir le projet courant
+oc project
+
+# Lister tous les projets accessibles
+oc projects
+
+# Créer ton projet de labo
+oc new-project ex280-lab02
+
+# Vérifier les nœuds du cluster
+oc get nodes
+</code></pre>
+<h3 id="10-s1-labs-a-retenir-ex280">À retenir (EX280)</h3>
+<ul>
+<li>Toujours vérifier le projet courant avec <code>oc project</code> avant de créer des ressources.</li>
+<li>Savoir basculer de projet : <code>oc project &lt;nom&gt;</code>.</li>
+</ul>
+<hr>
+<h2 id="10-s1-labs-s1-b2---deployment-simple-httpd">S1.B2 - Deployment simple HTTPD</h2>
+<p><strong>But</strong> : créer un Deployment HTTPD depuis une image Red Hat UBI.</p>
+<h3 id="10-s1-labs-concepts-2">Concepts</h3>
+<ul>
+<li>Un <strong>Deployment</strong> gère :
+<ul>
+<li>le nombre de pods (replicas)</li>
+<li>les mises à jour (rolling update)</li>
+</ul>
+</li>
+<li>L’image <code>registry.access.redhat.com/ubi8/httpd-24</code> embarque Apache HTTPD.</li>
+</ul>
+<h3 id="10-s1-labs-commandes-2">Commandes</h3>
+<pre><code class="language-bash"># Création du Deployment
+#  create deployment httpd-demo \
+  --image=registry.access.redhat.com/ubi8/httpd-24 \
+  --port=8080
+
+# Vérifier les pods créés
+#  get pods
+
+# Vue détaillée (IP, node, etc.)
+oc get pods -o wide
+
+# Vérifier le Deployment
+#  get deploy
+oc describe deploy httpd-demo
+</code></pre>
+<h3 id="10-s1-labs-a-retenir-ex280-2">À retenir (EX280)</h3>
+<ul>
+<li>Commande clé : <code>oc create deployment</code>.</li>
+<li>Un Deployment possède un <strong>selector de labels</strong> qui pointe vers ses pods.</li>
+</ul>
+<hr>
+<h2 id="10-s1-labs-s1-b3---service-route">S1.B3 - Service + Route</h2>
+<p><strong>But</strong> : exposer l’application vers l’intérieur du cluster, puis vers l’extérieur.</p>
+<h3 id="10-s1-labs-concepts-3">Concepts</h3>
+<ul>
+<li><strong>Service (ClusterIP)</strong> : IP interne stable, load-balancing entre les pods.</li>
+<li><strong>Route</strong> : URL HTTP(s) accessible depuis l’extérieur (spécifique OpenShift).</li>
+</ul>
+<h3 id="10-s1-labs-commandes-3">Commandes</h3>
+<pre><code class="language-bash"># Exposer le Deployment en Service (ClusterIP)
+oc expose deployment httpd-demo --port=8080
+
+# Voir le Service
+#  get svc
+oc describe svc httpd-demo
+
+# Exposer le Service en Route
+#  expose service httpd-demo
+
+# Voir la Route
+#  get route
+</code></pre>
+<p>Exemple d’URL :</p>
+<pre><code class="language-text">http://httpd-demo-ex280-lab02.apps-crc.testing
+</code></pre>
+<h3 id="10-s1-labs-a-retenir-ex280-3">À retenir (EX280)</h3>
+<ul>
+<li><code>oc expose deployment</code> → <strong>Service</strong>.</li>
+<li><code>oc expose service</code> → <strong>Route</strong>.</li>
+<li>URL publique trouvable avec <code>oc get route</code>.</li>
+</ul>
+<hr>
+<h2 id="10-s1-labs-s1-b4---scaling-endpoints">S1.B4 - Scaling + Endpoints</h2>
+<p><strong>But</strong> : augmenter/réduire le nombre de pods et comprendre l’impact sur le Service.</p>
+<h3 id="10-s1-labs-concepts-4">Concepts</h3>
+<ul>
+<li><code>replicas</code> = nombre de pods voulus.</li>
+<li><strong>Endpoints</strong> = liste <code>IP:port</code> des pods sélectionnés par le Service.</li>
+</ul>
+<h3 id="10-s1-labs-commandes-4">Commandes</h3>
+<pre><code class="language-bash"># Monter à 3 replicas
+#  scale deployment httpd-demo --replicas=3
+
+# Vérifier les pods
+#  get pods -o wide
+
+# Voir les endpoints du Service
+#  get endpoints httpd-demo
+oc describe svc httpd-demo
+</code></pre>
+<h3 id="10-s1-labs-a-retenir-ex280-4">À retenir (EX280)</h3>
+<ul>
+<li>Commande clé : <code>oc scale deployment &lt;name&gt; --replicas=N</code>.</li>
+<li>Le Service envoie le trafic vers <strong>tous</strong> les endpoints correspondants.</li>
+</ul>
+<hr>
+<h2 id="10-s1-labs-s1-b5---configmap-secret-configuration-externe">S1.B5 - ConfigMap + Secret (configuration externe)</h2>
+<p><strong>But</strong> : sortir la configuration du conteneur et l’injecter dans les pods.</p>
+<h3 id="10-s1-labs-concepts-5">Concepts</h3>
+<ul>
+<li><strong>ConfigMap</strong> : données non sensibles (env, paramètres fonctionnels).</li>
+<li><strong>Secret</strong> : données sensibles (mot de passe, token, clé).</li>
+<li>Injection classique : <strong>variables d’environnement</strong>.</li>
+</ul>
+<h3 id="10-s1-labs-commandes-5">Commandes</h3>
+<pre><code class="language-bash"># Créer une ConfigMap
+#  create configmap httpd-config \
+  --from-literal=APP_ENV=ex280-lab02 \
+  --from-literal=APP_OWNER=zidane
+
+oc get configmap
+
+# Créer un Secret générique
+#  create secret generic httpd-secret \
+  --from-literal=APP_PASSWORD=S3cr3t-Ex280
+
+oc get secret
+
+# Injecter dans le Deployment
+#  set env deployment/httpd-demo --from=configmap/httpd-config
+oc set env deployment/httpd-demo --from=secret/httpd-secret
+
+# Voir la liste des variables configurées au niveau du Deployment
+#  set env deployment/httpd-demo --list
+
+# Vérifier dans un pod
+#  get pods
+oc exec -it &lt;NOM_POD&gt; -- env | grep APP_
+</code></pre>
+<h3 id="10-s1-labs-a-retenir-ex280-5">À retenir (EX280)</h3>
+<ul>
+<li>Création : <code>oc create configmap</code> / <code>oc create secret generic</code>.</li>
+<li>Injection : <code>oc set env deployment/... --from=configmap/...</code> ou <code>--from=secret/...</code>.</li>
+<li>Toujours vérifier dans le pod avec <code>oc exec ... env</code>.</li>
+</ul>
+<hr>
+<h2 id="10-s1-labs-s1-b6---probes-readiness-liveness">S1.B6 - Probes (readiness / liveness)</h2>
+<p><strong>But</strong> : contrôler la santé de l’application.</p>
+<h3 id="10-s1-labs-concepts-6">Concepts</h3>
+<ul>
+<li><strong>Readiness probe</strong> :
+<ul>
+<li>indique si le pod est <strong>prêt à recevoir du trafic</strong>.</li>
+<li>si KO → le Service ne l’utilise pas.</li>
+</ul>
+</li>
+<li><strong>Liveness probe</strong> :
+<ul>
+<li>indique si le pod est <strong>vivant</strong>.</li>
+<li>si KO → Kubernetes redémarre le conteneur.</li>
+</ul>
+</li>
+<li>Types courants : HTTP GET, TCP socket.</li>
+</ul>
+<h3 id="10-s1-labs-commandes-tcp">Commandes (TCP)</h3>
+<pre><code class="language-bash"># Supprimer d’éventuelles probes existantes
+#  set probe deployment/httpd-demo --readiness --remove
+oc set probe deployment/httpd-demo --liveness  --remove
+
+# Probes TCP
+#  set probe deployment/httpd-demo \
+  --readiness \
+  --open-tcp=8080 \
+  --initial-delay-seconds=5 \
+  --timeout-seconds=2
+
+oc set probe deployment/httpd-demo \
+  --liveness \
+  --open-tcp=8080 \
+  --initial-delay-seconds=10 \
+  --timeout-seconds=2
+
+# Vérifier sur le Deployment
+#  describe deployment httpd-demo | egrep 'Liveness|Readiness'
+</code></pre>
+<h3 id="10-s1-labs-a-retenir-ex280-6">À retenir (EX280)</h3>
+<ul>
+<li><code>oc set probe</code> permet d’ajouter/modifier/supprimer les probes.</li>
+<li><code>--open-tcp=PORT</code> = probe TCP.</li>
+<li>Readiness = participation au Service, Liveness = redémarrage.</li>
+</ul>
+<hr>
+<h2 id="10-s1-labs-s1-b7---requests-limits-ressources">S1.B7 - Requests / Limits (ressources)</h2>
+<p><strong>But</strong> : contrôler la consommation CPU / mémoire et la qualité de service.</p>
+<h3 id="10-s1-labs-concepts-7">Concepts</h3>
+<ul>
+<li><strong>requests</strong> : ressources minimales <em>demandées</em> (scheduling).</li>
+<li><strong>limits</strong> : plafond maximal autorisé.</li>
+<li>Les combinaisons requests/limits déterminent la <strong>QoS</strong> (Guaranteed / Burstable / BestEffort).</li>
+</ul>
+<h3 id="10-s1-labs-commandes-6">Commandes</h3>
+<pre><code class="language-bash"># Définir requests et limits sur le Deployment
+#  set resources deployment/httpd-demo \
+  --requests=cpu=50m,memory=64Mi \
+  --limits=cpu=200m,memory=256Mi
+
+# Vérifier sur le Deployment
+#  describe deployment httpd-demo | grep -A5 Limits
+
+# Vérifier sur un Pod
+#  get pods
+oc describe pod &lt;NOM_POD&gt; | grep -A5 Limits
+</code></pre>
+<h3 id="10-s1-labs-a-retenir-ex280-7">À retenir (EX280)</h3>
+<ul>
+<li>Commande clé : <code>oc set resources deployment/...</code>.</li>
+<li>Différence conceptuelle : <code>requests</code> (planification) vs <code>limits</code> (plafond).</li>
+</ul>
+<hr>
+<h2 id="10-s1-labs-s1-b8---pvc-volume-persistance">S1.B8 - PVC + volume + persistance</h2>
+<p><strong>But</strong> : monter un volume persistant et vérifier que les données survivent au redémarrage du pod.</p>
+<h3 id="10-s1-labs-concepts-8">Concepts</h3>
+<ul>
+<li><strong>PVC (PersistentVolumeClaim)</strong> : demande de stockage.</li>
+<li><strong>PV (PersistentVolume)</strong> : ressource de stockage réelle.</li>
+<li>Le pod monte un volume basé sur un PVC → les données sont persistantes.</li>
+</ul>
+<h3 id="10-s1-labs-yaml-pvc">YAML PVC</h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-httpd-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: crc-csi-hostpath-provisioner
+</code></pre>
+<h3 id="10-s1-labs-commandes-7">Commandes</h3>
+<pre><code class="language-bash"># Créer le PVC
+#  apply -f pvc-httpd-data.yaml
+oc get pvc
+
+# Attacher le PVC au Deployment
+#  set volume deployment/httpd-demo \
+  --add \
+  --name=httpd-data \
+  --type=persistentVolumeClaim \
+  --claim-name=pvc-httpd-data \
+  --mount-path=/var/www/html/data   # ou un chemin adapté
+
+# Vérifier sur le Deployment
+#  describe deployment httpd-demo | grep -A5 &quot;Volumes&quot;
+
+# Vérifier que le PVC est Bound
+#  get pvc
+</code></pre>
+<h3 id="10-s1-labs-test-de-persistance-principe">Test de persistance (principe)</h3>
+<pre><code class="language-bash"># 1) Pod 1 : écrire un fichier sur le volume
+oc exec -it &lt;POD1&gt; -- sh -c &quot;echo 'EX280 PVC OK' &gt; /var/www/html/data/test.txt; ls -l /var/www/html/data; cat /var/www/html/data/test.txt&quot;
+
+# 2) Supprimer le pod
+oc delete pod &lt;POD1&gt;
+oc get pods   # attendre que &lt;POD2&gt; soit Running
+
+# 3) Pod 2 : vérifier que le fichier existe toujours
+oc exec -it &lt;POD2&gt; -- sh -c &quot;ls -l /var/www/html/data; cat /var/www/html/data/test.txt&quot;
+# → doit afficher : EX280 PVC OK
+</code></pre>
+<h3 id="10-s1-labs-a-retenir-ex280-8">À retenir (EX280)</h3>
+<ul>
+<li>Création du PVC → <code>oc apply -f ...</code>, statut <code>Bound</code>.</li>
+<li>Attache au Deployment → <code>oc set volume ... --claim-name=... --mount-path=...</code>.</li>
+<li>Test : écrire un fichier, supprimer le pod, vérifier dans le nouveau pod.</li>
+</ul>
+<hr>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Semaine 2 - Labels, annotations, LimitRange, ResourceQuota</p>
+<h2 id="11-s2-labs-s2-b1---labels-selectors">S2.B1 - Labels &amp; selectors</h2>
+<p><strong>But</strong> : organiser les ressources et filtrer efficacement.</p>
+<h3 id="11-s2-labs-concepts">Concepts</h3>
+<ul>
+<li><strong>Label</strong> = paire clé/valeur utilisée pour :
+<ul>
+<li>organiser les ressources</li>
+<li>sélectionner des objets (<code>-l</code>, selectors de Services/Deployments)</li>
+</ul>
+</li>
+<li>Exemples : <code>app=httpd-demo</code>, <code>env=dev</code>, <code>tier=frontend</code>, <code>owner=zidane</code>.</li>
+</ul>
+<h3 id="11-s2-labs-commandes">Commandes</h3>
+<pre><code class="language-bash"># Vérifier les labels existants
+#  get deploy httpd-demo --show-labels
+oc get pods --show-labels
+oc get svc httpd-demo --show-labels
+
+# Ajouter des labels métier au Deployment
+#  label deploy httpd-demo env=dev tier=frontend owner=zidane --overwrite
+
+# Vérifier les labels
+oc get deploy httpd-demo --show-labels
+
+# Propager les labels au template de pod
+oc patch deployment httpd-demo -p '{
+  &quot;spec&quot;: {
+    &quot;template&quot;: {
+      &quot;metadata&quot;: {
+        &quot;labels&quot;: {
+          &quot;env&quot;: &quot;dev&quot;,
+          &quot;tier&quot;: &quot;frontend&quot;,
+          &quot;owner&quot;: &quot;zidane&quot;
+        }
+      }
+    }
+  }
+}'
+
+# Vérifier sur les pods (après recréation si besoin)
+oc get pods --show-labels
+
+# Vérifier le selector du Service
+#  describe svc httpd-demo
+</code></pre>
+<h3 id="11-s2-labs-a-retenir">À retenir</h3>
+<ul>
+<li><code>oc label</code> pour ajouter/modifier des labels (<code>--overwrite</code>).</li>
+<li>Les labels du <strong>template de pod</strong> (<code>spec.template.metadata.labels</code>) sont ceux qui comptent pour les nouveaux pods.</li>
+</ul>
+<hr>
+<h2 id="11-s2-labs-s2-b2---annotations-documentation-des-objets">S2.B2 - Annotations (documentation des objets)</h2>
+<p><strong>But</strong> : documenter les ressources (rôle, contact, ticket, etc.).</p>
+<h3 id="11-s2-labs-concepts-2">Concepts</h3>
+<ul>
+<li><strong>Annotation</strong> = métadonnée libre (non utilisée pour le routage ou les selectors).</li>
+<li>Utile pour : description, contact support, lien vers doc, ticket Jira, etc.</li>
+</ul>
+<h3 id="11-s2-labs-commandes-2">Commandes</h3>
+<pre><code class="language-bash"># Ajouter des annotations
+#  annotate deploy httpd-demo description=&quot;Frontend httpd pour EX280&quot; --overwrite
+oc annotate svc httpd-demo support-contact=&quot;zidane.djamal@example.com&quot; --overwrite
+
+# Vérifier via describe
+#  describe deploy httpd-demo | sed -n '1,25p'
+oc describe svc httpd-demo
+</code></pre>
+<h3 id="11-s2-labs-a-retenir-2">À retenir</h3>
+<ul>
+<li><code>oc annotate</code> pour les annotations.</li>
+<li>Lecture surtout via <code>oc describe</code>.</li>
+</ul>
+<hr>
+<h2 id="11-s2-labs-s2-b3---listes-filtres-avances--l--l---field-selector">S2.B3 - Listes &amp; filtres avancés (-l, -L, --field-selector)</h2>
+<p><strong>But</strong> : naviguer dans un projet chargé uniquement via CLI.</p>
+<h3 id="11-s2-labs-concepts-3">Concepts</h3>
+<ul>
+<li><code>-L</code> = afficher des labels en colonnes.</li>
+<li><code>-l</code> = filtrer sur les labels.</li>
+<li><code>--field-selector</code> = filtrer sur des champs internes (status.phase, <a href="http://metadata.name">metadata.name</a>, etc.).</li>
+</ul>
+<h3 id="11-s2-labs-commandes-3">Commandes</h3>
+<pre><code class="language-bash"># Afficher les labels en colonnes
+#  get pods -L app,env,tier,owner
+oc get svc  -L app,env,tier,owner
+
+# Filtres par labels
+#  get pods -l app=httpd-demo
+oc get pods -l env=dev,tier=frontend
+oc get pods -l app=autre-chose
+
+# Filtres par champs (status.phase)
+oc get pods --field-selector status.phase=Running
+oc get pods --field-selector status.phase=Pending
+</code></pre>
+<h3 id="11-s2-labs-a-retenir-3">À retenir</h3>
+<ul>
+<li><code>-l</code> = filtre sur <strong>labels</strong> (que tu contrôles).</li>
+<li><code>--field-selector</code> = filtre sur des champs système (status, metadata…).</li>
+</ul>
+<hr>
+<h2 id="11-s2-labs-s2-b4---limitrange-defaults-cpu-memoire">S2.B4 - LimitRange : defaults CPU / mémoire</h2>
+<p><strong>But</strong> : définir des valeurs par défaut de requests/limits pour les conteneurs <strong>qui n’en déclarent pas</strong>.</p>
+<h3 id="11-s2-labs-concepts-4">Concepts</h3>
+<ul>
+<li><strong>LimitRange</strong> au niveau du namespace :
+<ul>
+<li>impose des valeurs par défaut (defaultRequest / default)</li>
+<li>éventuellement des min/max (non utilisés ici)</li>
+</ul>
+</li>
+<li>N’impacte <strong>pas</strong> les pods existants ni ceux qui ont déjà des resources.</li>
+</ul>
+<h3 id="11-s2-labs-yaml-limitrange">YAML LimitRange</h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: LimitRange
+metadata:
+  name: basic-limits
+spec:
+  limits:
+  - type: Container
+    default:
+      cpu: &quot;200m&quot;
+      memory: &quot;256Mi&quot;
+    defaultRequest:
+      cpu: &quot;50m&quot;
+      memory: &quot;64Mi&quot;
+</code></pre>
+<h3 id="11-s2-labs-commandes-4">Commandes</h3>
+<pre><code class="language-bash"># Créer le LimitRange
+#  apply -f limitrange-basic.yaml
+oc get limitrange
+oc describe limitrange basic-limits
+</code></pre>
+<p>Exemple de sortie :</p>
+<pre><code class="language-text">Type        Resource  Min  Max  Default Request  Default Limit
+----        --------  ---  ---  ---------------  -------------
+Container   cpu       -    -    50m              200m
+Container   memory    -    -    64Mi             256Mi
+</code></pre>
+<h3 id="11-s2-labs-tester-l’effet">Tester l’effet</h3>
+<pre><code class="language-bash"># Créer un Deployment SANS resources
+#  create deployment demo-nores \
+  --image=registry.access.redhat.com/ubi8/httpd-24
+
+# Vérifier les pods
+#  get pods -l app=demo-nores
+
+# Voir les ressources injectées
+#  describe pod -l app=demo-nores | sed -n '/Limits:/,/Environment:/p'
+</code></pre>
+<h3 id="11-s2-labs-a-retenir-4">À retenir</h3>
+<ul>
+<li>LimitRange n’agit que sur les <strong>nouveaux</strong> pods sans resources déclarées.</li>
+<li>Il injecte les valeurs <code>defaultRequest</code> (requests) et <code>default</code> (limits).</li>
+</ul>
+<hr>
+<h2 id="11-s2-labs-s2-b5---resourcequota-budget-cpu-memoire-pods">S2.B5 - ResourceQuota : budget CPU / mémoire / pods</h2>
+<p><strong>But</strong> : limiter le “budget” de ressources d’un namespace.</p>
+<h3 id="11-s2-labs-concepts-5">Concepts</h3>
+<ul>
+<li><strong>ResourceQuota</strong> compte l’utilisation (<code>Used</code>) et compare au plafond (<code>Hard</code>).</li>
+<li>Si une création ou un scale dépasse le plafond → l’API refuse la requête (<code>Forbidden: exceeded quota</code>).</li>
+</ul>
+<h3 id="11-s2-labs-yaml-resourcequota">YAML ResourceQuota</h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+spec:
+  hard:
+    requests.cpu: &quot;200m&quot;
+    requests.memory: &quot;256Mi&quot;
+    limits.cpu: &quot;500m&quot;
+    limits.memory: &quot;640Mi&quot;
+    pods: &quot;4&quot;
+</code></pre>
+<h3 id="11-s2-labs-commandes-5">Commandes</h3>
+<pre><code class="language-bash"># Créer le quota
+#  apply -f resourcequota-basic.yaml
+oc get resourcequota
+oc describe resourcequota compute-quota
+</code></pre>
+<p>Exemple de sortie (extrait) :</p>
+<pre><code class="language-text">Resource         Used   Hard
+--------         ----   ----
+limits.cpu       400m   500m
+limits.memory    512Mi  640Mi
+pods             2      4
+requests.cpu     100m   200m
+requests.memory  128Mi  256Mi
+</code></pre>
+<h3 id="11-s2-labs-depasser-le-quota-test">Dépasser le quota (test)</h3>
+<pre><code class="language-bash"># Tentative de création d’un pod supplémentaire
+#  run quota-test \
+  --image=registry.access.redhat.com/ubi8/httpd-24 \
+  --restart=Never
+</code></pre>
+<p>Erreur typique :</p>
+<pre><code class="language-text">Error from server (Forbidden): pods &quot;quota-test&quot; is forbidden: exceeded quota: compute-quota, requested: ..., used: ..., limited: ...
+</code></pre>
+<h3 id="11-s2-labs-liberer-des-ressources-et-voir-l’effet">Libérer des ressources et voir l’effet</h3>
+<pre><code class="language-bash"># Réduire des deployments pour libérer des ressources
+#  scale deployment demo-nores --replicas=0
+
+# Vérifier les pods restants
+#  get pods
+
+# Vérifier le quota après coup
+#  describe resourcequota compute-quota
+</code></pre>
+<h3 id="11-s2-labs-a-retenir-5">À retenir</h3>
+<ul>
+<li>ResourceQuota = <strong>budget</strong> par namespace.</li>
+<li>En cas de dépassement → l’API refuse la création/scale.</li>
+<li>Les champs <code>Used</code> sont recalculés à chaque création/suppression/scale de pod.</li>
+</ul>
+<hr>
+<h2 id="11-s2-labs-s2-b6---synthese-semaine-2">S2.B6 - Synthèse Semaine 2</h2>
+<h3 id="11-s2-labs-a-savoir-par-cœur-version-examen">À savoir par cœur (version examen)</h3>
+<p><strong>Labels / selectors</strong></p>
+<pre><code class="language-bash">oc get pods --show-labels
+oc get pods -L app,env,tier,owner
+oc get pods -l app=httpd-demo,env=dev,tier=frontend
+</code></pre>
+<p><strong>Annotations</strong></p>
+<pre><code class="language-bash">oc annotate deploy httpd-demo description=&quot;...&quot; --overwrite
+oc annotate svc httpd-demo support-contact=&quot;...&quot; --overwrite
+# Lecture via
+#  describe deploy httpd-demo
+oc describe svc httpd-demo
+</code></pre>
+<p><strong>LimitRange</strong></p>
+<ul>
+<li>YAML <code>kind: LimitRange</code>, type <code>Container</code>.</li>
+<li><code>defaultRequest</code> + <code>default</code> injectés sur les <strong>nouveaux</strong> pods sans resources.</li>
+</ul>
+<p><strong>ResourceQuota</strong></p>
+<ul>
+<li>YAML <code>kind: ResourceQuota</code>.</li>
+<li><code>oc describe resourcequota</code> pour voir <code>Used</code> vs <code>Hard</code>.</li>
+<li>Erreur <code>Forbidden (exceeded quota)</code> en cas de dépassement.</li>
+</ul>
+<hr>
+<p>Fin du récap <strong>Semaine 1 &amp; 2</strong>.<br>
+Ce document sert de <strong>polycopié EX280</strong> pour tes labs CLI sur <code>ex280-lab02</code>.<br>
+Tu peux l’enrichir avec tes propres notes (exemples d’erreurs, sorties réelles, captures).</p>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Semaine 3 - Updates / rollbacks / ImageStreams / Kustomize / Templates</p>
+<h3 id="12-s3-guide-lab-objectif-s3">Objectif S3</h3>
+<p>Être capable, uniquement en CLI :</p>
+<ul>
+<li>De gérer les <strong>mises à jour</strong> d’une appli (rollout / rollback).</li>
+<li>De connecter un <strong>ImageStream</strong> à un Deployment.</li>
+<li>De configurer des <strong>triggers</strong> (imageChange, configChange).</li>
+<li>D’utiliser <strong>Kustomize</strong> pour séparer dev / stage.</li>
+<li>De déployer depuis un <strong>template OpenShift</strong> (oc process).</li>
+</ul>
+<blockquote>
+<p>Projet de travail : <code>ex280-lab02</code>, appli de base <code>httpd-demo</code> (ou équivalent).</p>
+</blockquote>
+<hr>
+<h3 id="12-s3-guide-lab-3-1-brique-1---rollout-rollback-d’un-deployment">3.1 Brique 1 - Rollout / rollback d’un Deployment</h3>
+<p><strong>Concepts</strong></p>
+<ul>
+<li><code>oc rollout</code> pilote l’historique des déploiements.</li>
+<li>Un <code>deployment</code> garde plusieurs révisions (revisions).</li>
+<li><strong>Rollback</strong> = revenir à la révision précédente (ou une révision donnée).</li>
+</ul>
+<p><strong>Commandes de base</strong></p>
+<p>Lister les déploiements et voir l’historique :</p>
+<pre><code class="language-bash">oc get deploy
+oc rollout history deployment/httpd-demo
+</code></pre>
+<p>Voir le détail d’une révision précise :</p>
+<pre><code class="language-bash">oc rollout history deployment/httpd-demo --revision=1
+</code></pre>
+<p>Déployer une nouvelle version (exemple : changer d’image) :</p>
+<pre><code class="language-bash">oc set image deployment/httpd-demo \
+  httpd-24=registry.access.redhat.com/ubi8/httpd-24:1.1
+
+oc rollout status deployment/httpd-demo
+</code></pre>
+<p>En cas de problème, revenir à la version précédente :</p>
+<pre><code class="language-bash">oc rollout undo deployment/httpd-demo
+# ou vers une révision précise
+oc rollout undo deployment/httpd-demo --to-revision=1
+</code></pre>
+<p><strong>À retenir EX280</strong></p>
+<ul>
+<li><code>oc rollout history</code>, <code>oc rollout status</code>, <code>oc rollout undo</code>.</li>
+<li>Savoir <strong>faire un rollback rapide</strong> si la nouvelle image casse l’appli.</li>
+</ul>
+<hr>
+<h3 id="12-s3-guide-lab-3-2-brique-2---imagestreams-pont-ex288">3.2 Brique 2 - ImageStreams (pont EX288)</h3>
+<p><strong>Concepts</strong></p>
+<ul>
+<li>Un <strong>ImageStream</strong> suit des images (tags) dans un registre.</li>
+<li>Permet de <strong>décorréler</strong> le nom logique (imagestream:tag) de l’URL de registre.</li>
+<li>Base pour les <strong>triggers</strong> d’update automatique.</li>
+</ul>
+<p><strong>Créer un ImageStream simple</strong></p>
+<p>Import d’une image externe dans un ImageStream :</p>
+<pre><code class="language-bash">oc import-image httpd-ubi \
+  --from=registry.access.redhat.com/ubi8/httpd-24 \
+  --confirm
+
+oc get is
+oc describe is httpd-ubi
+</code></pre>
+<p>Tag interne (latest → stable) :</p>
+<pre><code class="language-bash">oc tag httpd-ubi:latest httpd-ubi:stable
+oc get istag
+</code></pre>
+<p><strong>Lier un Deployment à un ImageStream</strong></p>
+<p>Modifier le Deployment pour utiliser l’ImageStream local :</p>
+<pre><code class="language-bash">oc set image deployment/httpd-demo \
+  httpd-24=image-registry.openshift-image-registry.svc:5000/ex280-lab02/httpd-ubi:stable
+
+oc rollout status deployment/httpd-demo
+</code></pre>
+<p><strong>À retenir EX280/EX288</strong></p>
+<ul>
+<li><code>oc import-image</code>, <code>oc tag</code>.</li>
+<li>ImageStream = abstraction logique + point d’ancrage pour triggers.</li>
+</ul>
+<hr>
+<h3 id="12-s3-guide-lab-3-3-brique-3---triggers-sur-deployment">3.3 Brique 3 - Triggers sur Deployment</h3>
+<p><strong>Concepts</strong></p>
+<ul>
+<li><strong>configChange</strong> : relance un rollout dès qu’on modifie le Deployment.</li>
+<li><strong>imageChange</strong> : relance un rollout dès qu’un tag d’ImageStream change.</li>
+</ul>
+<p><strong>Voir les triggers actuels</strong></p>
+<pre><code class="language-bash">oc set triggers deployment/httpd-demo
+</code></pre>
+<p><strong>Activer un trigger imageChange</strong></p>
+<p>Exemple : le container <code>httpd-24</code> doit réagir au tag <code>httpd-ubi:stable</code> :</p>
+<pre><code class="language-bash">oc set triggers deployment/httpd-demo \
+  --from-image=ex280-lab02/httpd-ubi:stable \
+  -c httpd-24 \
+  --auto
+
+oc set triggers deployment/httpd-demo
+</code></pre>
+<p>Tester : re‑tagger l’image (simulateur d’update CI/CD)</p>
+<pre><code class="language-bash">oc tag httpd-ubi:latest httpd-ubi:stable --reference-policy=local
+oc get pods
+</code></pre>
+<p>Tu dois voir un <strong>nouveau rollout</strong> démarrer automatiquement.</p>
+<p><strong>À retenir EX280</strong></p>
+<ul>
+<li><code>oc set triggers</code> pour lister / activer / désactiver.</li>
+<li>imageChange + ImageStream = base de l’update automatisé côté EX288.</li>
+</ul>
+<hr>
+<h3 id="12-s3-guide-lab-3-4-brique-4---kustomize-overlays-dev-stage">3.4 Brique 4 - Kustomize (overlays dev / stage)</h3>
+<p><strong>Concepts</strong></p>
+<ul>
+<li>Kustomize permet d’appliquer des <strong>patches par environnement</strong> sans dupliquer les YAML.</li>
+<li>On définit un <code>kustomization.yaml</code> et on applique avec <code>oc apply -k</code>.</li>
+</ul>
+<p><strong>Arborescence type</strong></p>
+<pre><code class="language-text">kustomize/
+  base/
+    deployment.yaml
+    service.yaml
+    kustomization.yaml
+  overlays/
+    dev/
+      kustomization.yaml
+      patch-resources.yaml
+    stage/
+      kustomization.yaml
+      patch-resources.yaml
+</code></pre>
+<p><strong>Exemple de base/kustomization.yaml</strong></p>
+<pre><code class="language-yaml">resources:
+  - deployment.yaml
+  - service.yaml
+</code></pre>
+<p><strong>Exemple d’overlay dev (overlays/dev/kustomization.yaml)</strong></p>
+<pre><code class="language-yaml">resources:
+  - ../../base
+
+patches:
+  - patch-resources.yaml
+</code></pre>
+<p><strong>Patch typique</strong> (<code>patch-resources.yaml</code>) :</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-demo
+spec:
+  template:
+    spec:
+      containers:
+        - name: httpd-24
+          resources:
+            requests:
+              cpu: 50m
+            limits:
+              cpu: 200m
+</code></pre>
+<p><strong>Application avec oc</strong></p>
+<pre><code class="language-bash"># dev
+oc apply -k kustomize/overlays/dev
+
+# stage
+oc apply -k kustomize/overlays/stage
+</code></pre>
+<p><strong>À retenir EX280/EX288</strong></p>
+<ul>
+<li><code>oc apply -k</code> (Kustomize intégré).</li>
+<li>base + overlays = séparation propre par environnement (dev, stage…).</li>
+</ul>
+<hr>
+<h3 id="12-s3-guide-lab-3-5-brique-5---templates-openshift">3.5 Brique 5 - Templates OpenShift</h3>
+<p><strong>Concepts</strong></p>
+<ul>
+<li>Un <strong>Template</strong> regroupe plusieurs objets (Service, Route, Deployment…).</li>
+<li>Paramétrable via <strong>parameters</strong>.</li>
+<li>On utilise <code>oc process</code> puis <code>oc apply</code> ou <code>oc create</code>.</li>
+</ul>
+<p><strong>Exemple de template (httpd-template.yaml)</strong></p>
+<pre><code class="language-yaml">apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: httpd-template
+objects:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: ${APP_NAME}
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: ${APP_NAME}
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}
+        spec:
+          containers:
+          - name: httpd-24
+            image: registry.access.redhat.com/ubi8/httpd-24
+            ports:
+            - containerPort: 8080
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${APP_NAME}
+    spec:
+      selector:
+        app: ${APP_NAME}
+      ports:
+      - port: 8080
+        targetPort: 8080
+parameters:
+  - name: APP_NAME
+    description: Nom de l’application
+    required: true
+</code></pre>
+<p><strong>Traitement et déploiement</strong></p>
+<pre><code class="language-bash"># Voir le résultat en YAML
+oc process -f httpd-template.yaml -p APP_NAME=httpd-tmpl | less
+
+# Créer les objets directement
+oc process -f httpd-template.yaml -p APP_NAME=httpd-tmpl | oc apply -f -
+
+oc get all -l app=httpd-tmpl
+</code></pre>
+<p><strong>À retenir EX280</strong></p>
+<ul>
+<li><code>oc process -f tmpl.yaml -p KEY=VALUE | oc apply -f -</code>.</li>
+<li>Template = paquet paramétrable réutilisable (base pour EX288 build/deploy).</li>
+</ul>
+<hr>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Semaine 4 - Identité, multi‑tenancy &amp; Helm</p>
+<h3 id="13-s4-guide-lab-objectif-s4">Objectif S4</h3>
+<p>Être capable, uniquement en CLI :</p>
+<ul>
+<li>De gérer <strong>IdP htpasswd</strong>, utilisateurs et groupes.</li>
+<li>D’assigner des <strong>rôles</strong> (RBAC) à des utilisateurs / groupes.</li>
+<li>De configurer <strong>LimitRange / ResourceQuota / ClusterResourceQuota</strong> par projet.</li>
+<li>De définir un <strong>project template</strong> “clé en main”.</li>
+<li>De manipuler <strong>Helm</strong> (install, upgrade, rollback) côté dev.</li>
+</ul>
+<hr>
+<h3 id="13-s4-guide-lab-4-1-brique-6---idp-htpasswd-vue-admin-cluster">4.1 Brique 6 - IdP htpasswd (vue admin cluster)</h3>
+<blockquote>
+<p>À faire uniquement avec un compte cluster‑admin (<code>kubeadmin</code> sur CRC).</p>
+</blockquote>
+<p><strong>Concepts</strong></p>
+<ul>
+<li><code>htpasswd</code> = fichier local d’utilisateurs / mots de passe.</li>
+<li>Secret <code>htpasswd-secret</code> dans <code>openshift-config</code>.</li>
+<li>CR <code>OAuth/cluster</code> référence ce secret.</li>
+</ul>
+<p><strong>Étapes type (sur ta machine locale)</strong></p>
+<ol>
+<li>Créer le fichier htpasswd :</li>
+</ol>
+<pre><code class="language-bash">htpasswd -c -B -b users.htpasswd zidane 'MotDePasseFort!'
+# ajouter d’autres users (sans -c pour ne pas écraser)
+htpasswd -B -b users.htpasswd dev1 'Passw0rd!'
+</code></pre>
+<ol start="2">
+<li>Créer le secret dans <code>openshift-config</code> :</li>
+</ol>
+<pre><code class="language-bash">oc create secret generic htpasswd-secret \
+  --from-file=htpasswd=users.htpasswd \
+  -n openshift-config
+</code></pre>
+<ol start="3">
+<li>Patcher l’<code>OAuth</code> :</li>
+</ol>
+<pre><code class="language-bash">oc edit oauth cluster
+</code></pre>
+<p>Exemple d’IdP à ajouter dans <code>spec.identityProviders</code> :</p>
+<pre><code class="language-yaml">- name: local-htpasswd
+  mappingMethod: claim
+  type: HTPasswd
+  htpasswd:
+    fileData:
+      name: htpasswd-secret
+</code></pre>
+<ol start="4">
+<li>Se reconnecter via la console/CLI avec un user htpasswd.</li>
+</ol>
+<p><strong>À retenir EX280</strong></p>
+<ul>
+<li><code>htpasswd</code> → secret openshift-config → <code>oauth/cluster</code>.</li>
+<li>Savoir retrouver cette conf pour troubleshooting.</li>
+</ul>
+<hr>
+<h3 id="13-s4-guide-lab-4-2-brique-7---users-groups-rbac-projet">4.2 Brique 7 - Users, groups, RBAC projet</h3>
+<p><strong>Concepts</strong></p>
+<ul>
+<li>Un utilisateur apparaît quand il se connecte, ou via <code>oc create user</code> (selon version).</li>
+<li>Un <strong>group</strong> rassemble plusieurs users.</li>
+<li>On assigne des <strong>roles</strong> à un user ou group dans un projet.</li>
+</ul>
+<p><strong>Groups</strong></p>
+<pre><code class="language-bash"># Créer un groupe\ noc adm groups new dev-team zidane dev1 dev2
+
+# Lister / voir\ noc get groups
+oc describe group dev-team
+</code></pre>
+<p><strong>RBAC projet</strong> (ex : donner admin sur <code>ex280-lab02</code> au groupe) :</p>
+<pre><code class="language-bash">oc adm policy add-role-to-group admin dev-team -n ex280-lab02
+
+# Vérifier pour un user précis
+oc auth can-i create deployment -n ex280-lab02 --as=dev1
+</code></pre>
+<p><strong>Donner un rôle à un user directement</strong></p>
+<pre><code class="language-bash">oc adm policy add-role-to-user view zidane -n ex280-lab02
+oc adm policy add-role-to-user edit dev1 -n ex280-lab02
+</code></pre>
+<p><strong>À retenir EX280</strong></p>
+<ul>
+<li><code>oc adm groups new</code>, <code>oc adm policy add-role-to-{user,group}</code>.</li>
+<li><code>oc auth can-i</code> = réflexe de vérification.</li>
+</ul>
+<hr>
+<h3 id="13-s4-guide-lab-4-3-brique-8---clusterresourcequota-vs-resourcequota">4.3 Brique 8 - ClusterResourceQuota vs ResourceQuota</h3>
+<p><strong>Concepts</strong></p>
+<ul>
+<li><code>ResourceQuota</code> = quota par <strong>namespace</strong>.</li>
+<li><code>ClusterResourceQuota</code> = quota <strong>trans‑namespaces</strong> (pattern multi‑projets).</li>
+</ul>
+<p><strong>Exemple ResourceQuota (rappel)</strong></p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+spec:
+  hard:
+    requests.cpu: &quot;200m&quot;
+    requests.memory: &quot;256Mi&quot;
+    limits.cpu: &quot;500m&quot;
+    limits.memory: &quot;640Mi&quot;
+    pods: &quot;4&quot;
+</code></pre>
+<pre><code class="language-bash">oc apply -f resourcequota-basic.yaml -n ex280-lab02
+oc describe resourcequota compute-quota -n ex280-lab02
+</code></pre>
+<p><strong>Exemple ClusterResourceQuota</strong> (nommage type EX280) :</p>
+<pre><code class="language-yaml">apiVersion: quota.openshift.io/v1
+kind: ClusterResourceQuota
+metadata:
+  name: crq-ex280-sandbox
+spec:
+  quota:
+    hard:
+      requests.cpu: &quot;2&quot;
+      requests.memory: &quot;4Gi&quot;
+      limits.cpu: &quot;4&quot;
+      limits.memory: &quot;8Gi&quot;
+  selector:
+    labels:
+      matchLabels:
+        env: sandbox
+</code></pre>
+<p>Appliquer :</p>
+<pre><code class="language-bash">oc apply -f clusterresourcequota-ex280.yaml
+oc get clusterresourcequota
+oc describe clusterresourcequota crq-ex280-sandbox
+</code></pre>
+<p><strong>À retenir EX280</strong></p>
+<ul>
+<li><code>ClusterResourceQuota</code> → API <code>quota.openshift.io/v1</code>.</li>
+<li>Sélection des namespaces via labels (ex : <code>env=sandbox</code>).</li>
+</ul>
+<hr>
+<h3 id="13-s4-guide-lab-4-4-brique-9---project-template">4.4 Brique 9 - Project template</h3>
+<p><strong>Concepts</strong></p>
+<ul>
+<li>OpenShift peut utiliser un <strong>template de projet</strong> pour pré‑créer :
+<ul>
+<li>quotas, limitranges,</li>
+<li>rôles de base,</li>
+<li>ConfigMaps / Secrets standards.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Étapes type</strong></p>
+<ol>
+<li>Créer un template projet :</li>
+</ol>
+<pre><code class="language-yaml">apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: project-template-ex280
+objects:
+  - apiVersion: v1
+    kind: ResourceQuota
+    metadata:
+      name: compute-quota
+    spec:
+      hard:
+        requests.cpu: &quot;200m&quot;
+        requests.memory: &quot;256Mi&quot;
+        limits.cpu: &quot;500m&quot;
+        limits.memory: &quot;640Mi&quot;
+        pods: &quot;4&quot;
+  - apiVersion: v1
+    kind: LimitRange
+    metadata:
+      name: basic-limits
+    spec:
+      limits:
+      - type: Container
+        default:
+          cpu: &quot;200m&quot;
+          memory: &quot;256Mi&quot;
+        defaultRequest:
+          cpu: &quot;50m&quot;
+          memory: &quot;64Mi&quot;
+</code></pre>
+<ol start="2">
+<li>Placer le template dans un projet infra (souvent <code>openshift-config</code> ou projet dédié) :</li>
+</ol>
+<pre><code class="language-bash">oc apply -f project-template-ex280.yaml -n openshift-config
+</code></pre>
+<ol start="3">
+<li>Lier ce template au cluster (CR <code>Project</code> ou <code>ProjectRequest</code> selon version) :</li>
+</ol>
+<pre><code class="language-bash">oc edit project.config.openshift.io/cluster
+</code></pre>
+<p>Exemple à ajouter :</p>
+<pre><code class="language-yaml">spec:
+  projectRequestTemplate:
+    name: project-template-ex280
+</code></pre>
+<ol start="4">
+<li>Tester la création d’un nouveau projet :</li>
+</ol>
+<pre><code class="language-bash">oc new-project ex280-test-template
+oc get resourcequota,limitrange -n ex280-test-template
+</code></pre>
+<p><strong>À retenir EX280</strong></p>
+<ul>
+<li>Project template = standardisation automatique des nouveaux projets.</li>
+<li>Tout passe par un Template + <code>project.config.openshift.io/cluster</code>.</li>
+</ul>
+<hr>
+<h3 id="13-s4-guide-lab-4-5-brique-10---helm-cote-dev-pont-ex288">4.5 Brique 10 - Helm côté dev (pont EX288)</h3>
+<p><strong>Concepts</strong></p>
+<ul>
+<li>Helm = gestionnaire de packages Kubernetes.</li>
+<li><code>chart</code> = paquet (templates + values).</li>
+<li>Cycle de base : install → upgrade → rollback → uninstall.</li>
+</ul>
+<p><strong>Commandes de base</strong></p>
+<ol>
+<li>Initialiser / vérifier Helm :</li>
+</ol>
+<pre><code class="language-bash">helm version
+</code></pre>
+<ol start="2">
+<li>Ajouter un repo public (ex : Bitnami) :</li>
+</ol>
+<pre><code class="language-bash">helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+</code></pre>
+<ol start="3">
+<li>Chercher un chart :</li>
+</ol>
+<pre><code class="language-bash">helm search repo nginx
+</code></pre>
+<ol start="4">
+<li>Installer un chart simple :</li>
+</ol>
+<pre><code class="language-bash">helm install my-nginx bitnami/nginx \
+  --namespace ex280-lab02 \
+  --create-namespace=false
+
+oc get all -n ex280-lab02 -l app.kubernetes.io/instance=my-nginx
+</code></pre>
+<ol start="5">
+<li>Upgrade (avec override de valeurs) :</li>
+</ol>
+<pre><code class="language-bash">helm upgrade my-nginx bitnami/nginx \
+  --namespace ex280-lab02 \
+  --set service.type=ClusterIP
+</code></pre>
+<ol start="6">
+<li>Rollback :</li>
+</ol>
+<pre><code class="language-bash">helm history my-nginx -n ex280-lab02
+helm rollback my-nginx 1 -n ex280-lab02
+</code></pre>
+<ol start="7">
+<li>Uninstall :</li>
+</ol>
+<pre><code class="language-bash">helm uninstall my-nginx -n ex280-lab02
+</code></pre>
+<p><strong>À retenir EX280/EX288</strong></p>
+<ul>
+<li><code>helm install / upgrade / rollback / uninstall</code>.</li>
+<li>Label <code>app.kubernetes.io/instance</code> pour filtrer les ressources d’un release.</li>
+</ul>
+<hr>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># EX280 - Semaine 5 &amp; 6 - Sécurité, Réseau, Operators &amp; Troubleshooting</p>
+<p>Contexte général :</p>
+<ul>
+<li>Cluster : CRC local (OpenShift 4.x)</li>
+<li>Projet principal : <code>ex280-lab02</code></li>
+<li>Appli de base : <code>httpd-demo</code> (UBI8 httpd-24, port 8080) + éventuellement d’autres démos pour les tests réseau</li>
+<li>Objectif global : être capable de <strong>diagnostiquer et corriger</strong> les problèmes de sécurité/réseau et d’operators <strong>uniquement en CLI</strong>.</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-semaine-5---securite-applicative-reseau">Semaine 5 - Sécurité applicative &amp; Réseau</h2>
+<h3 id="14-s5-s6-labs-objectif-fin-s5">Objectif fin S5</h3>
+<p>En ligne de commande uniquement, savoir :</p>
+<ul>
+<li>Utiliser <strong>ServiceAccount</strong> + <strong>SCC</strong> pour corriger un pod bloqué.</li>
+<li>Comprendre et appliquer des <strong>NetworkPolicies</strong> (deny-all, allow ciblé).</li>
+<li>Configurer et diagnostiquer des <strong>Routes</strong> + <strong>TLS</strong>.</li>
+<li>Exposer un service <strong>non HTTP</strong> (ou faux non-HTTP) et comprendre les limitations.</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-brique-1---serviceaccounts-scc-securite-des-pods">Brique 1 - ServiceAccounts &amp; SCC (sécurité des pods)</h2>
+<p><strong>Position plan :</strong> S5 J1-J2</p>
+<h3 id="14-s5-s6-labs-concepts">Concepts</h3>
+<ul>
+<li>Un pod utilise une <strong>ServiceAccount</strong> (SA) → identite technique dans le cluster.</li>
+<li>L’SA est mappée à une <strong>SCC</strong> (SecurityContextConstraints) sous OpenShift.</li>
+<li>Une SCC détermine ce qu’un pod a le droit de faire : UID, volumes, hostNetwork, priviliges, etc.</li>
+</ul>
+<h3 id="14-s5-s6-labs-commandes-de-base">Commandes de base</h3>
+<pre><code class="language-bash"># 1) Lister les SA du projet
+oc project ex280-lab02
+oc get sa
+
+# 2) Créer une SA dédiée pour httpd
+oc create sa httpd-sa
+oc get sa httpd-sa -o yaml
+
+# 3) Associer le deployment à cette SA
+oc set serviceaccount deployment/httpd-demo httpd-sa
+oc describe deploy httpd-demo | sed -n '1,40p'
+
+# 4) Voir la SCC utilisée par les pods
+oc get pod -l app=httpd-demo
+POD=$(oc get pod -l app=httpd-demo -o jsonpath='{.items[0].metadata.name}')
+
+# Annotation de SCC sur le pod
+oc get pod &quot;$POD&quot; -o jsonpath='{.metadata.annotations.openshift\.io/scc}' ; echo
+
+# 5) Lister toutes les SCC
+oc get scc
+oc describe scc restricted
+</code></pre>
+<h3 id="14-s5-s6-labs-a-retenir-ex280">À retenir EX280</h3>
+<ul>
+<li><code>oc set serviceaccount</code> pour lier un déploiement à une SA.</li>
+<li><code>oc get pod ... -o jsonpath='{.metadata.annotations.openshift\.io/scc}'</code> pour voir la SCC effective.</li>
+<li><code>oc describe scc</code> pour comprendre pourquoi un pod est bloqué (volumes interdits, UID, hostPath, etc.).</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-brique-2---diagnostiquer-un-pod-bloque-scc-sa">Brique 2 - Diagnostiquer un pod bloqué (SCC / SA)</h2>
+<p><strong>Position plan :</strong> S5 J1-J2 (suite)</p>
+<h3 id="14-s5-s6-labs-scenario-type">Scénario type</h3>
+<ol>
+<li>Un pod reste en <code>CrashLoopBackOff</code> ou <code>CreateContainerError</code>.</li>
+<li>Message d’erreur lié à <code>permission denied</code>, <code>privileged</code>, <code>runAsUser</code>, <code>hostPath</code> non autorisé, etc.</li>
+</ol>
+<h3 id="14-s5-s6-labs-checklist-cli">Checklist CLI</h3>
+<pre><code class="language-bash"># 1) Voir les événements récents
+oc get events --sort-by=.lastTimestamp | tail -n 20
+
+# 2) Inspecter le pod en détail
+oc describe pod &lt;POD&gt;
+
+# 3) Voir les logs du conteneur
+oc logs &lt;POD&gt;                # premier conteneur
+oc logs &lt;POD&gt; -c &lt;container&gt; # si plusieurs conteneurs
+
+# 4) Vérifier la SA et la SCC
+oc get pod &lt;POD&gt; -o jsonpath='{.spec.serviceAccountName}' ; echo
+oc get pod &lt;POD&gt; -o jsonpath='{.metadata.annotations.openshift\.io/scc}' ; echo
+
+# 5) Si besoin, changer la SA ou ajuster la SCC (via rôles/RBAC ou binding pré-existant)
+oc set serviceaccount deployment/&lt;DEPLOY&gt; &lt;SA-NAME&gt;
+</code></pre>
+<h3 id="14-s5-s6-labs-a-retenir-ex280-2">À retenir EX280</h3>
+<ul>
+<li>Réflexe : <code>events</code> → <code>describe pod</code> → <code>logs</code> → <code>SA</code>/<code>SCC</code>.</li>
+<li>Dans l’examen, il y aura typiquement <strong>un pod bloqué par SCC</strong> à corriger (changer SA, retirer un volume interdit, etc.).</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-brique-3---networkpolicies-deny-all-ouvertures-ciblees">Brique 3 - NetworkPolicies (deny-all + ouvertures ciblées)</h2>
+<p><strong>Position plan :</strong> S5 J3-J4</p>
+<h3 id="14-s5-s6-labs-concepts-2">Concepts</h3>
+<ul>
+<li>Sans <strong>NetworkPolicy</strong>, tout parle avec tout dans le cluster (dans le même réseau).</li>
+<li>Dès qu’une <strong>NetPol</strong> de type ingress est présente pour un pod, <strong>tout est bloqué par défaut</strong> sauf ce qui est explicitement autorisé.</li>
+<li>NetPol s’appuie sur des <strong>labels</strong> de pods et de namespaces.</li>
+</ul>
+<h3 id="14-s5-s6-labs-preparation">Préparation</h3>
+<pre><code class="language-bash"># Vérifier que le projet a le bon label (souvent automatique)
+oc get ns ex280-lab02 --show-labels
+
+# S’assurer d’avoir plusieurs pods pour tester
+oc get pods -o wide
+</code></pre>
+<h3 id="14-s5-s6-labs-3-1-politique-deny-all-ingress">3.1. Politique deny-all (ingress)</h3>
+<p>Fichier <code>netpol-deny-all.yaml</code> :</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-ingress
+  namespace: ex280-lab02
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+</code></pre>
+<p>Application et vérification :</p>
+<pre><code class="language-bash">oc apply -f netpol-deny-all.yaml
+oc get networkpolicy
+oc describe networkpolicy deny-all-ingress
+</code></pre>
+<p>Effet : aucun pod du namespace ne reçoit plus de trafic entrant (sauf trafic autorisé par d’autres NetPols plus spécifiques).</p>
+<h3 id="14-s5-s6-labs-3-2-autoriser-seulement-le-trafic-vers-httpd-demo-depuis-le-meme-namespace">3.2. Autoriser seulement le trafic vers httpd-demo depuis le même namespace</h3>
+<p>Fichier <code>netpol-allow-httpd-namespace.yaml</code> :</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-httpd-same-namespace
+  namespace: ex280-lab02
+spec:
+  podSelector:
+    matchLabels:
+      app: httpd-demo
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: 8080
+</code></pre>
+<p>Application :</p>
+<pre><code class="language-bash">oc apply -f netpol-allow-httpd-namespace.yaml
+
+# Tester depuis un autre pod &quot;test&quot; dans le même namespace
+oc run netpol-tester --image=registry.access.redhat.com/ubi8/ubi -it --restart=Never -- bash
+
+# Dans le shell du pod
+curl -sS http://httpd-demo:8080 || echo &quot;KO&quot;
+</code></pre>
+<h3 id="14-s5-s6-labs-a-retenir-ex280-3">À retenir EX280</h3>
+<ul>
+<li><code>podSelector: {}</code> avec <code>policyTypes: [Ingress]</code> → deny-all.</li>
+<li>Ajouter ensuite des NetPol de type <code>allow</code> très ciblées.</li>
+<li>Tester <strong>en CLI</strong> depuis un pod <code>oc run ...</code> avec <code>curl</code>.</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-brique-4---networkpolicies-avancees-ingress-egress">Brique 4 - NetworkPolicies avancées (ingress + egress)</h2>
+<p><strong>Position plan :</strong> S5 J3-J4 (suite)</p>
+<h3 id="14-s5-s6-labs-exemple-autoriser-httpd-demo-a-sortir-vers-un-service-externe-dns-https">Exemple : autoriser httpd-demo à sortir vers un service externe (DNS + HTTPS)</h3>
+<p>Fichier <code>netpol-egress-httpd.yaml</code> :</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: httpd-allow-egress
+  namespace: ex280-lab02
+spec:
+  podSelector:
+    matchLabels:
+      app: httpd-demo
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 53
+        - protocol: UDP
+          port: 53
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 443
+</code></pre>
+<p>Application :</p>
+<pre><code class="language-bash">oc apply -f netpol-egress-httpd.yaml
+</code></pre>
+<h3 id="14-s5-s6-labs-a-retenir-ex280-4">À retenir EX280</h3>
+<ul>
+<li><code>policyTypes</code> peut contenir <code>Ingress</code>, <code>Egress</code> ou les deux.</li>
+<li><code>ipBlock</code> permet de restreindre par CIDR (attention à l’examen, rester simple).</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-brique-5---routes-tls">Brique 5 - Routes + TLS</h2>
+<p><strong>Position plan :</strong> S5 J5</p>
+<h3 id="14-s5-s6-labs-concepts-3">Concepts</h3>
+<ul>
+<li><strong>Route</strong> = exposition HTTP/HTTPS via le routeur OpenShift.</li>
+<li>Terminaisons classiques :
+<ul>
+<li><code>edge</code> : TLS au niveau routeur, backend en HTTP.</li>
+<li><code>passthrough</code> : TLS de bout en bout, routeur ne déchiffre pas.</li>
+<li><code>reencrypt</code> : TLS client→routeur + routeur→backend, certificat différent.</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-s5-s6-labs-5-1-route-http-simple-deja-vue-s1">5.1. Route HTTP simple (déjà vue S1)</h3>
+<pre><code class="language-bash">oc get route httpd-demo
+oc describe route httpd-demo
+</code></pre>
+<h3 id="14-s5-s6-labs-5-2-route-tls-en-edge-termination">5.2. Route TLS en edge termination</h3>
+<pre><code class="language-bash"># Modifier la route pour activer TLS &quot;edge&quot;
+oc annotate route httpd-demo \
+  kubernetes.io/tls-acme=&quot;true&quot; --overwrite  # si IngressController configuré pour ACME
+
+# ou éditer la route en YAML
+oc edit route httpd-demo
+</code></pre>
+<p>Exemple de spec TLS minimale :</p>
+<pre><code class="language-yaml">spec:
+  to:
+    kind: Service
+    name: httpd-demo
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+</code></pre>
+<p>Vérification :</p>
+<pre><code class="language-bash">oc get route httpd-demo -o wide
+# Tester dans le navigateur ou via curl
+curl -k https://httpd-demo-ex280-lab02.apps-crc.testing
+</code></pre>
+<h3 id="14-s5-s6-labs-5-3-points-a-verifier-en-cas-de-probleme-tls">5.3. Points à vérifier en cas de problème TLS</h3>
+<pre><code class="language-bash"># 1) Nom de la route
+oc get route httpd-demo
+
+# 2) Service &amp; endpoints
+oc get svc httpd-demo
+oc describe svc httpd-demo
+oc get endpoints httpd-demo
+
+# 3) Logs du routeur (si autorisé)
+oc get pods -n openshift-ingress
+</code></pre>
+<h3 id="14-s5-s6-labs-a-retenir-ex280-5">À retenir EX280</h3>
+<ul>
+<li>Savoir lire la spec TLS d’une route.</li>
+<li>Edge termination basique est suffisante pour l’examen.</li>
+<li>Toujours vérifier Service + Endpoints quand la route ne répond pas.</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-brique-6---exposition-non-http-vue-d’ensemble">Brique 6 - Exposition non-HTTP (vue d’ensemble)</h2>
+<p><strong>Position plan :</strong> S5 J5</p>
+<h3 id="14-s5-s6-labs-concepts-4">Concepts</h3>
+<ul>
+<li>OpenShift privilégie l’expo <strong>HTTP/HTTPS via Route</strong>.</li>
+<li>Pour du non-HTTP (TCP brut, DB, etc.), on utilisera :
+<ul>
+<li><code>Service</code> de type ClusterIP (interne),</li>
+<li>ou selon l’infra, <code>NodePort</code> / <code>LoadBalancer</code> (moins fréquent sur CRC).</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-s5-s6-labs-exemple-rapide-mode-theorie-pratique-si-active">Exemple rapide (mode théorie/pratique si activé)</h3>
+<pre><code class="language-bash"># Service TCP simple
+oc expose deploy httpd-demo --name=httpd-demo-tcp --port=8443 --target-port=8443 --type=ClusterIP
+oc describe svc httpd-demo-tcp
+</code></pre>
+<p>À l’examen, il peut être demandé d’exposer un service non HTTP <strong>à l’intérieur du cluster</strong> (autre pod qui s’y connecte), pas forcément vers l’extérieur.</p>
+<hr>
+<h2 id="14-s5-s6-labs-synthese-semaine-5">Synthèse Semaine 5</h2>
+<p>Réflexes à mémoriser :</p>
+<ul>
+<li>
+<p><strong>SCC/SA</strong></p>
+<ul>
+<li><code>oc get pod &lt;POD&gt; -o jsonpath='{.spec.serviceAccountName}'</code></li>
+<li><code>oc get pod &lt;POD&gt; -o jsonpath='{.metadata.annotations.openshift\.io/scc}'</code></li>
+<li><code>oc set serviceaccount deployment/&lt;DEPLOY&gt; &lt;SA&gt;</code></li>
+</ul>
+</li>
+<li>
+<p><strong>NetworkPolicies</strong></p>
+<ul>
+<li><code>oc get networkpolicy</code></li>
+<li>Deny-all = <code>podSelector: {}</code> + <code>policyTypes: [Ingress]</code>.</li>
+<li>Tester avec <code>oc run ... --image=ubi</code> + <code>curl</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Routes/TLS</strong></p>
+<ul>
+<li><code>oc get route</code>, <code>oc describe route</code>.</li>
+<li>Termination <code>edge</code> + <code>insecureEdgeTerminationPolicy</code>.</li>
+<li>Vérifier Service + Endpoints systématiquement.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-semaine-6---operators-troubleshooting-structure-tekton-pont-ex288">Semaine 6 - Operators, Troubleshooting structuré &amp; Tekton (pont EX288)</h2>
+<h3 id="14-s5-s6-labs-objectif-fin-s6">Objectif fin S6</h3>
+<p>Savoir :</p>
+<ul>
+<li>Installer / supprimer un <strong>Operator</strong> via OLM (au moins via YAML Subscription/OperatorGroup).</li>
+<li>Créer une <strong>ressource personnalisée (CR)</strong> simple fournie par cet Operator.</li>
+<li>Appliquer un <strong>playbook de troubleshooting</strong> commun (image, quota, SCC, NetPol, route, etc.).</li>
+<li>Utiliser <strong>Tekton (OpenShift Pipelines)</strong> pour exécuter une Task/Pipeline simple (pont EX288).</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-brique-7---olm-operatorhub-installation-d’un-operator">Brique 7 - OLM / OperatorHub : installation d’un Operator</h2>
+<p><strong>Position plan :</strong> S6 J1</p>
+<h3 id="14-s5-s6-labs-concepts-5">Concepts</h3>
+<ul>
+<li>OLM (Operator Lifecycle Manager) gère l’installation/MAJ des Operators.</li>
+<li>Un Operator est installé via :
+<ul>
+<li>un <strong>OperatorGroup</strong></li>
+<li>une <strong>Subscription</strong></li>
+</ul>
+</li>
+<li>L’Operator crée ensuite des <strong>ClusterServiceVersions (CSV)</strong> et des CRD.</li>
+</ul>
+<h3 id="14-s5-s6-labs-exemple-verifier-les-operators-deja-presents">Exemple : vérifier les Operators déjà présents</h3>
+<pre><code class="language-bash"># Operators installés dans tous les namespaces
+oc get csv -A
+
+# Operators visibles dans un namespace donné
+oc get csv -n openshift-operators
+</code></pre>
+<h3 id="14-s5-s6-labs-exemple-d’installation-modele-generique">Exemple d’installation (modèle générique)</h3>
+<p>Namespace cible pour un operator applicatif :</p>
+<pre><code class="language-bash">oc new-project ex280-operators || oc project ex280-operators
+</code></pre>
+<p><code>operatorgroup-generic.yaml</code> :</p>
+<pre><code class="language-yaml">apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: ex280-operators-og
+  namespace: ex280-operators
+spec:
+  targetNamespaces:
+    - ex280-operators
+</code></pre>
+<p><code>subscription-generic.yaml</code> (modèle, le nom de package/channel dépend de l’operator choisi) :</p>
+<pre><code class="language-yaml">apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: my-operator-sub
+  namespace: ex280-operators
+spec:
+  channel: stable
+  name: my-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+</code></pre>
+<p>Application :</p>
+<pre><code class="language-bash">oc apply -f operatorgroup-generic.yaml
+oc apply -f subscription-generic.yaml
+
+# Suivre l’état
+oc get subscription -n ex280-operators
+oc get csv -n ex280-operators
+</code></pre>
+<h3 id="14-s5-s6-labs-a-retenir-ex280-6">À retenir EX280</h3>
+<ul>
+<li>Pattern YAML : <strong>OperatorGroup + Subscription</strong>.</li>
+<li><code>oc get csv -n &lt;ns&gt;</code> pour vérifier que l’operator est bien installé (CSV en <code>Succeeded</code>).</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-brique-8---crd-cr-utiliser-l’operator">Brique 8 - CRD / CR : utiliser l’Operator</h2>
+<p><strong>Position plan :</strong> S6 J2</p>
+<h3 id="14-s5-s6-labs-concepts-6">Concepts</h3>
+<ul>
+<li>Un Operator expose des <strong>CRD</strong> → types de ressources custom (par ex. <code>Task</code>, <code>Pipeline</code>, <code>Database</code>, etc.).</li>
+<li>Tu crées une <strong>CR</strong> (Custom Resource) de ce type, l’Operator observe et déploie le nécessaire.</li>
+</ul>
+<h3 id="14-s5-s6-labs-verifier-les-crd">Vérifier les CRD</h3>
+<pre><code class="language-bash"># Toutes les CRD
+oc get crd | head
+
+# Filtrer par mot clé
+oc get crd | grep pipeline || true
+oc get crd | grep database || true
+</code></pre>
+<h3 id="14-s5-s6-labs-exemple-avec-openshift-pipelines-tekton---si-deja-present">Exemple avec OpenShift Pipelines (Tekton) - si déjà présent</h3>
+<pre><code class="language-bash">oc get crd | grep tekton
+oc api-resources | grep -i tekton
+</code></pre>
+<p>Si tu as la CRD <code>tasks.tekton.dev</code> :</p>
+<pre><code class="language-bash">oc get tasks.tekton.dev -A
+</code></pre>
+<h3 id="14-s5-s6-labs-a-retenir-ex280-ex288">À retenir EX280/EX288</h3>
+<ul>
+<li>Un Operator n’est pas une simple image : il gère un <strong>cycle de vie complet</strong> via des CR.</li>
+<li>L’examen peut demander de <strong>créer une CR</strong> basique fournie par un Operator.</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-brique-9---troubleshooting-structure-playbook">Brique 9 - Troubleshooting structuré (Playbook)</h2>
+<p><strong>Position plan :</strong> S6 J3-J4</p>
+<h3 id="14-s5-s6-labs-9-1-probleme-image-imagepullbackoff">9.1. Problème image (ImagePullBackOff)</h3>
+<pre><code class="language-bash"># Symptôme
+oc get pods
+
+# Détails
+oc describe pod &lt;POD&gt; | sed -n '/Events:/,$p'
+
+# Si erreur image
+# - image not found
+# - unauthorized
+
+# Vérifs
+oc get secret -n &lt;ns&gt;
+# vérifier imagePullSecret si besoin
+
+# Correction
+oc set image deployment/&lt;DEPLOY&gt; &lt;CONTAINER&gt;=&lt;image-correcte&gt;
+# ou
+oc patch deployment/&lt;DEPLOY&gt; -p '{&quot;spec&quot;:{&quot;template&quot;:{&quot;spec&quot;:{&quot;imagePullSecrets&quot;:[{&quot;name&quot;:&quot;&lt;secret&gt;&quot;}]}}}}'
+</code></pre>
+<h3 id="14-s5-s6-labs-9-2-probleme-quota-exceeded-quota">9.2. Problème quota (exceeded quota)</h3>
+<pre><code class="language-bash"># Symptôme : création/scale refuse avec Forbidden exceeded quota
+
+oc describe resourcequota -A
+oc describe resourcequota &lt;NOM&gt; -n &lt;NS&gt;
+
+# Vérifier Used vs Hard
+
+# Correction
+# - réduire des replicas
+# - supprimer des pods inutiles
+oc scale deployment &lt;DEPLOY&gt; --replicas=0
+</code></pre>
+<h3 id="14-s5-s6-labs-9-3-probleme-scc-createcontainererror-permission-denied">9.3. Problème SCC (CreateContainerError / permission denied)</h3>
+<pre><code class="language-bash">oc get events --sort-by=.lastTimestamp | tail -n 20
+oc describe pod &lt;POD&gt;
+
+# Vérifier la SA et la SCC
+oc get pod &lt;POD&gt; -o jsonpath='{.spec.serviceAccountName}' ; echo
+oc get pod &lt;POD&gt; -o jsonpath='{.metadata.annotations.openshift\.io/scc}' ; echo
+
+# Correction fréquente
+oc set serviceaccount deployment/&lt;DEPLOY&gt; &lt;SA-AUTORISEE&gt;
+</code></pre>
+<h3 id="14-s5-s6-labs-9-4-probleme-networkpolicy-pod-qui-ne-parle-plus">9.4. Problème NetworkPolicy (pod qui ne parle plus)</h3>
+<pre><code class="language-bash"># Vérifier NetPol dans le namespace
+oc get networkpolicy
+
+# Inspecter la cible
+oc describe networkpolicy &lt;NP&gt;
+
+# Tester depuis un pod de test
+oc run netpol-debug --image=registry.access.redhat.com/ubi8/ubi -it --restart=Never -- bash
+curl -v http://&lt;svc&gt;:&lt;port&gt; || echo &quot;KO&quot;
+</code></pre>
+<h3 id="14-s5-s6-labs-9-5-probleme-route-tls">9.5. Problème Route / TLS</h3>
+<pre><code class="language-bash">oc get route
+oc describe route &lt;ROUTE&gt;
+
+# Vérifier le Service + Endpoints
+oc describe svc &lt;SVC&gt;
+oc get endpoints &lt;SVC&gt;
+
+# Tester depuis un pod interne
+oc run route-debug --image=registry.access.redhat.com/ubi8/ubi -it --restart=Never -- bash
+curl -vk http://&lt;svc&gt;:&lt;port&gt;
+</code></pre>
+<h3 id="14-s5-s6-labs-a-retenir">À retenir</h3>
+<p>Ordre logique pour tout incident :</p>
+<ol>
+<li><code>oc get</code> (vue globale)</li>
+<li><code>oc describe</code> (événements, spec/selector)</li>
+<li><code>oc logs</code> (pour les containers qui démarrent)</li>
+<li>Cas particuliers : <code>quota</code>, <code>SCC</code>, <code>NetPol</code>, <code>Route/TLS</code>, <code>Operator/CR</code>.</li>
+</ol>
+<hr>
+<h2 id="14-s5-s6-labs-brique-10---tekton-openshift-pipelines-pont-ex288">Brique 10 - Tekton / OpenShift Pipelines (pont EX288)</h2>
+<p><strong>Position plan :</strong> S6 J5</p>
+<h3 id="14-s5-s6-labs-concepts-7">Concepts</h3>
+<ul>
+<li>Tekton = moteur de <strong>CI/CD cloud-native</strong>.</li>
+<li>Ressources principales :
+<ul>
+<li><code>Task</code> : suite de <code>steps</code> (containers).</li>
+<li><code>TaskRun</code> : exécution d’une Task.</li>
+<li><code>Pipeline</code> / <code>PipelineRun</code> : enchaînement de Tasks.</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-s5-s6-labs-namespace-ci-cd">Namespace CI/CD</h3>
+<pre><code class="language-bash">oc new-project ex280-cicd || oc project ex280-cicd
+</code></pre>
+<h3 id="14-s5-s6-labs-exemple-de-task-simple">Exemple de Task simple</h3>
+<p><code>task-echo.yaml</code> :</p>
+<pre><code class="language-yaml">apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: echo-task
+  namespace: ex280-cicd
+spec:
+  steps:
+    - name: echo
+      image: registry.access.redhat.com/ubi8/ubi
+      script: |
+        #!/usr/bin/env bash
+        echo &quot;Task Tekton EX280-EX288 OK&quot;
+</code></pre>
+<p>Application :</p>
+<pre><code class="language-bash">oc apply -f task-echo.yaml
+oc get tasks -n ex280-cicd
+</code></pre>
+<h3 id="14-s5-s6-labs-taskrun-pour-executer-la-task">TaskRun pour exécuter la Task</h3>
+<p><code>taskrun-echo.yaml</code> :</p>
+<pre><code class="language-yaml">apiVersion: tekton.dev/v1
+kind: TaskRun
+metadata:
+  name: echo-taskrun
+  namespace: ex280-cicd
+spec:
+  taskRef:
+    name: echo-task
+</code></pre>
+<p>Application et vérification :</p>
+<pre><code class="language-bash">oc apply -f taskrun-echo.yaml
+oc get taskrun -n ex280-cicd
+oc describe taskrun echo-taskrun -n ex280-cicd
+oc logs -l tekton.dev/taskRun=echo-taskrun -n ex280-cicd
+</code></pre>
+<h3 id="14-s5-s6-labs-a-retenir-ex288">À retenir EX288</h3>
+<ul>
+<li>Pattern minimal : <code>Task</code> + <code>TaskRun</code>.</li>
+<li><code>oc logs -l tekton.dev/taskRun=&lt;name&gt;</code> pour voir les logs.</li>
+</ul>
+<hr>
+<h2 id="14-s5-s6-labs-synthese-semaine-6">Synthèse Semaine 6</h2>
+<p>Points clés à garder en tête pour l’examen :</p>
+<ul>
+<li>
+<p><strong>Operators (OLM)</strong></p>
+<ul>
+<li>OperatorGroup + Subscription pour installer.</li>
+<li><code>oc get csv -n &lt;ns&gt;</code> pour vérifier l’état.</li>
+<li>Utilisation d’au moins une <strong>CR</strong> basique de l’Operator.</li>
+</ul>
+</li>
+<li>
+<p><strong>Troubleshooting</strong></p>
+<ul>
+<li>Toujours passer par une <strong>méthode</strong> : <code>get</code> → <code>describe</code> → <code>logs</code> → cas spéciaux (quota, SCC, NetPol, Route, Operator).</li>
+<li>Savoir reconnaître les messages d’erreur typiques : <code>ImagePullBackOff</code>, <code>exceeded quota</code>, <code>forbidden</code>, <code>CreateContainerConfigError</code>, <code>CrashLoopBackOff</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Tekton</strong></p>
+<ul>
+<li>Comprendre qu’une Task est un objet Kubernetes (CRD), appliqué comme du YAML.</li>
+<li>Savoir lancer une TaskRun et lire ses logs.</li>
+</ul>
+</li>
+</ul>
+<p>Ces briques complètent les semaines S1-S4 : à S6, tu as tous les réflexes EX280/EX288 pour <strong>corriger un cluster en panne</strong> et <strong>automatiser un minimum de pipeline</strong>.</p>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Semaine 7 - Bootcamp EX280 (micro‑scénarios)</p>
+<h2 id="15-s7-bootcamp-organisation">Organisation</h2>
+<ul>
+<li><strong>J1-J3</strong> : 4-6 micro‑scénarios/jour (10-20 min chacun).</li>
+<li><strong>J4-J5</strong> : scénarios longs (2-3 h) avec enchaînement de tâches.</li>
+<li><strong>J6-J7</strong> : focus sur les faiblesses + 1 scénario “build from Git” (pont EX288).</li>
+</ul>
+<p>Chaque micro‑scénario doit avoir :</p>
+<ol>
+<li><strong>Énoncé court</strong> (1 ou 2 phrases).</li>
+<li><strong>Objectif</strong> clair.</li>
+<li><strong>Critères de réussite</strong> (ce que tu dois vérifier/montrer).</li>
+</ol>
+<hr>
+<h2 id="15-s7-bootcamp-brique-1---scenarios-“users-groups-rbac”">Brique 1 - Scénarios “Users/Groups/RBAC”</h2>
+<h3 id="15-s7-bootcamp-1-1-concepts">1.1. Concepts</h3>
+<ul>
+<li><strong>User</strong> : identité humaine ou technique (souvent gérée via IdP, mais pour l’exam tu as parfois des users locaux).</li>
+<li><strong>Group</strong> : ensemble de users, pratique pour leur donner des rôles en une fois.</li>
+<li><strong>RBAC</strong> : attribution de rôles (<code>view</code>, <code>edit</code>, <code>admin</code>, roles custom) à des users ou groupes dans un projet.</li>
+</ul>
+<h3 id="15-s7-bootcamp-1-2-exemple-de-scenario">1.2. Exemple de scénario</h3>
+<blockquote>
+<p>Créer un user développeur pour un projet, l’ajouter à un groupe, et lui donner les droits pour déployer dans un namespace donné.</p>
+</blockquote>
+<h3 id="15-s7-bootcamp-1-3-commandes-et-reflexes">1.3. Commandes et réflexes</h3>
+<pre><code class="language-bash"># Vérifier où tu es
+oc project
+
+# Vérifier les utilisateurs (HTPasswd / cluster)
+oc get users
+oc get groups
+
+# Créer un groupe (si besoin)
+oc adm groups new dev-ex280
+
+# Ajouter un user dans un groupe
+oc adm groups add-users dev-ex280 zidane
+
+# Donner des droits dans le namespace ex280-lab02
+oc adm policy add-role-to-user edit zidane -n ex280-lab02
+# ou via groupe
+oc adm policy add-role-to-group edit dev-ex280 -n ex280-lab02
+
+# Vérification RBAC
+oc auth can-i create deployment -n ex280-lab02 --as=zidane
+oc auth can-i get pods -n ex280-lab02 --as=zidane
+</code></pre>
+<h3 id="15-s7-bootcamp-1-4-a-retenir-ex280">1.4. À retenir EX280</h3>
+<ul>
+<li><code>oc adm policy add-role-to-user</code> / <code>add-role-to-group</code> sont les réflexes pour RBAC.</li>
+<li><code>oc auth can-i</code> pour vérifier les droits, avec <code>--as=</code> si besoin de simuler un user.</li>
+</ul>
+<hr>
+<h2 id="15-s7-bootcamp-brique-2---scenarios-“scc-serviceaccount”">Brique 2 - Scénarios “SCC / ServiceAccount”</h2>
+<h3 id="15-s7-bootcamp-2-1-concepts">2.1. Concepts</h3>
+<ul>
+<li><strong>ServiceAccount (SA)</strong> : identité utilisée par les pods pour accéder à l’API et aux ressources.</li>
+<li><strong>SCC (Security Context Constraints)</strong> : mécanisme spécifique OpenShift pour contrôler ce que les pods ont le droit de faire (UID, capabilities, volumes, etc.).</li>
+</ul>
+<h3 id="15-s7-bootcamp-2-2-exemple-de-scenario">2.2. Exemple de scénario</h3>
+<blockquote>
+<p>Un pod ne démarre pas à cause de la SCC. Diagnostiquer puis corriger proprement (sans donner plus de droits que nécessaire).</p>
+</blockquote>
+<h3 id="15-s7-bootcamp-2-3-commandes-et-reflexes">2.3. Commandes et réflexes</h3>
+<pre><code class="language-bash"># Voir les événements du namespace
+oc get events --sort-by=.lastTimestamp | tail -n 20
+
+# Voir pourquoi un pod est bloqué
+oc describe pod &lt;pod&gt;
+
+# Lister les SCC
+oc get scc
+oc describe scc restricted
+
+# Lister les SA du projet
+oc get sa
+
+# Associer une SCC à une SA
+oc adm policy add-scc-to-user anyuid -z httpd-sa -n ex280-lab02
+# (ou utiliser une SCC plus restrictive fournie par l’énoncé)
+
+# Vérifier la SA utilisée par un déploiement
+oc get deploy httpd-demo -o yaml | sed -n '/serviceAccountName:/p'
+</code></pre>
+<h3 id="15-s7-bootcamp-2-4-a-retenir-ex280">2.4. À retenir EX280</h3>
+<ul>
+<li>Lire le message d’erreur dans <code>oc describe pod</code> (section <strong>Events</strong>).</li>
+<li>Savoir attacher une SCC à une SA via <code>oc adm policy add-scc-to-user</code>.</li>
+<li>Ne pas utiliser systématiquement <code>anyuid</code> en prod réelle, mais en EX280 tu dois maîtriser la mécanique.</li>
+</ul>
+<hr>
+<h2 id="15-s7-bootcamp-brique-3---scenarios-“quotas-limitrange”">Brique 3 - Scénarios “Quotas / LimitRange”</h2>
+<h3 id="15-s7-bootcamp-3-1-concepts">3.1. Concepts</h3>
+<ul>
+<li><strong>ResourceQuota</strong> : limite globale de ressources (CPU, mémoire, pods, PVC, etc.) par projet.</li>
+<li><strong>LimitRange</strong> : valeurs par défaut / bornes min/max pour CPU/mémoire par pod ou conteneur.</li>
+</ul>
+<h3 id="15-s7-bootcamp-3-2-exemple-de-scenario">3.2. Exemple de scénario</h3>
+<blockquote>
+<p>Un développeur ne peut plus créer de pods dans un projet. Tu dois diagnostiquer et adapter le quota.</p>
+</blockquote>
+<h3 id="15-s7-bootcamp-3-3-commandes-et-reflexes">3.3. Commandes et réflexes</h3>
+<pre><code class="language-bash"># Vérifier les ResourceQuota et LimitRange
+oc get resourcequota
+oc describe resourcequota
+
+oc get limitrange
+oc describe limitrange
+
+# Essayer de créer un pod simple (pour reproduire l’erreur)
+oc run test-quota \
+  --image=registry.access.redhat.com/ubi8/httpd-24 \
+  --restart=Never
+
+# Lire l’erreur
+# Error from server (Forbidden): exceeded quota: ...
+
+# Adapter le quota (YAML)
+oc edit resourcequota compute-quota
+
+# Vérifier les valeurs Used/Hard
+oc describe resourcequota compute-quota
+</code></pre>
+<h3 id="15-s7-bootcamp-3-4-a-retenir-ex280">3.4. À retenir EX280</h3>
+<ul>
+<li>Le message <strong>exceeded quota</strong> est très typique → regarder <code>ResourceQuota</code>.</li>
+<li>Adapter proprement le YAML (et pas tout supprimer).</li>
+</ul>
+<hr>
+<h2 id="15-s7-bootcamp-brique-4---scenarios-“networkpolicy”">Brique 4 - Scénarios “NetworkPolicy”</h2>
+<h3 id="15-s7-bootcamp-4-1-concepts">4.1. Concepts</h3>
+<ul>
+<li>Sans NetworkPolicy : trafic autorisé entre tous les pods.</li>
+<li>Avec des NetworkPolicies : les pods correspondants à <code>podSelector</code> sont isolés pour les directions définies.</li>
+<li>On joue sur :
+<ul>
+<li><code>podSelector</code> / <code>namespaceSelector</code> / <code>ipBlock</code>.</li>
+<li><code>ingress</code> / <code>egress</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="15-s7-bootcamp-4-2-exemple-de-scenario">4.2. Exemple de scénario</h3>
+<blockquote>
+<p>Une appli ne peut plus appeler un service dans un autre namespace après mise en place de NetPol. Trouver et corriger la politique.</p>
+</blockquote>
+<h3 id="15-s7-bootcamp-4-3-commandes-et-reflexes">4.3. Commandes et réflexes</h3>
+<pre><code class="language-bash"># Voir les NetPol dans le namespace
+oc get networkpolicy
+oc describe networkpolicy &lt;nom&gt;
+
+# Repérer l’existence d’un deny-all
+oc get networkpolicy
+# Exemple : default-deny-all
+
+# Tester la connectivité depuis un pod
+oc exec -it &lt;pod&gt; -- curl -sS http://service:8080 || echo &quot;KO&quot;
+
+# Exemple de NetPol d’ouverture ciblée
+cat &lt;&lt; 'EOF' &gt; allow-httpd-from-namespace.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-httpd-from-same-namespace
+spec:
+  podSelector:
+    matchLabels:
+      app: httpd-demo
+  ingress:
+  - from:
+    - podSelector: {}
+    ports:
+    - protocol: TCP
+      port: 8080
+EOF
+
+oc apply -f allow-httpd-from-namespace.yaml
+</code></pre>
+<h3 id="15-s7-bootcamp-4-4-a-retenir-ex280">4.4. À retenir EX280</h3>
+<ul>
+<li>Penser <strong>NetPol</strong> dès que “ ça ping mais ça curl pas ”.</li>
+<li>Combiner <code>oc describe networkpolicy</code> + tests <code>curl</code>.</li>
+</ul>
+<hr>
+<h2 id="15-s7-bootcamp-brique-5---scenarios-“routes-tls-services”">Brique 5 - Scénarios “Routes / TLS / Services”</h2>
+<h3 id="15-s7-bootcamp-5-1-concepts">5.1. Concepts</h3>
+<ul>
+<li><strong>Service</strong> : IP virtuelle interne qui expose un ensemble de pods.</li>
+<li><strong>Route</strong> : objet OpenShift qui expose un Service au monde extérieur via le router (HTTP/HTTPS).</li>
+<li>Modes TLS (à pratiquer) :
+<ul>
+<li><code>edge</code>, <code>passthrough</code>, <code>reencrypt</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="15-s7-bootcamp-5-2-exemple-de-scenario">5.2. Exemple de scénario</h3>
+<blockquote>
+<p>Une route renvoie 503 ou ne résout pas. Diagnostiquer, corriger soit la route, soit le service, soit les endpoints.</p>
+</blockquote>
+<h3 id="15-s7-bootcamp-5-3-commandes-et-reflexes">5.3. Commandes et réflexes</h3>
+<pre><code class="language-bash"># Routes
+oc get route
+oc describe route &lt;nom&gt;
+
+# Services
+oc get svc
+oc describe svc &lt;nom&gt;
+
+# Endpoints
+oc get endpoints
+oc get endpoints &lt;nom&gt; -o yaml
+
+# Vérifier que les labels du Service matchent ceux des pods
+oc get pods --show-labels
+oc describe svc httpd-demo | sed -n '/Selector:/,/Endpoints:/p'
+
+# TLS (edge typiquement)
+oc create route edge httpd-tls \
+  --service=httpd-demo \
+  --cert=cert.crt --key=cert.key --ca-cert=ca.crt
+</code></pre>
+<h3 id="15-s7-bootcamp-5-4-a-retenir-ex280">5.4. À retenir EX280</h3>
+<ul>
+<li>Un 503 sur route OpenShift = souvent <strong>pas d’endpoint</strong> ou <strong>mauvais selector</strong>.</li>
+<li>Lire la section Selector/Endpoints du Service.</li>
+</ul>
+<hr>
+<h2 id="15-s7-bootcamp-brique-6---scenarios-“pv-pvc-statefulset”">Brique 6 - Scénarios “PV/PVC + StatefulSet”</h2>
+<h3 id="15-s7-bootcamp-6-1-concepts">6.1. Concepts</h3>
+<ul>
+<li><strong>PV (PersistentVolume)</strong> : volume (souvent fourni par un storage backend) visible à l’échelle cluster.</li>
+<li><strong>PVC (PersistentVolumeClaim)</strong> : demande de stockage par un namespace.</li>
+<li><strong>StatefulSet</strong> : contrôleur pour workloads avec identité stable et stockage persistant.</li>
+</ul>
+<h3 id="15-s7-bootcamp-6-2-exemple-de-scenario">6.2. Exemple de scénario</h3>
+<blockquote>
+<p>Une base simple (statefulset) ne démarre pas parce que le PVC est Pending. Tu dois diagnostiquer et corriger.</p>
+</blockquote>
+<h3 id="15-s7-bootcamp-6-3-commandes-et-reflexes">6.3. Commandes et réflexes</h3>
+<pre><code class="language-bash"># Voir PV/PVC
+oc get pv
+oc get pvc
+oc describe pvc pvc-httpd-data
+
+# Vérifier la StorageClass
+oc get storageclass
+
+# Debugger un PVC Pending
+oc describe pvc &lt;nom&gt;
+# Regarder les events liés au provisioner
+
+# StatefulSet
+oc get statefulset
+oc describe statefulset &lt;nom&gt;
+
+# Vérifier que le volumeClaimTemplates pointe sur une StorageClass existante
+oc get statefulset &lt;nom&gt; -o yaml | sed -n '/volumeClaimTemplates:/,/containers:/p'
+</code></pre>
+<h3 id="15-s7-bootcamp-6-4-a-retenir-ex280">6.4. À retenir EX280</h3>
+<ul>
+<li><code>STATUS=Pending</code> sur PVC = problème StorageClass / provisioner.</li>
+<li><code>describe pvc</code> montre les events et la cause (ex : storageclass inconnue).</li>
+</ul>
+<hr>
+<h2 id="15-s7-bootcamp-brique-7---scenarios-“update-rollback”">Brique 7 - Scénarios “Update / Rollback”</h2>
+<h3 id="15-s7-bootcamp-7-1-concepts">7.1. Concepts</h3>
+<ul>
+<li><code>Deployment</code> garde un historique des révisions (replicaSets).</li>
+<li><code>oc rollout history</code> permet de voir ces révisions.</li>
+<li><code>oc rollout undo</code> permet de revenir à la version précédente.</li>
+</ul>
+<h3 id="15-s7-bootcamp-7-2-exemple-de-scenario">7.2. Exemple de scénario</h3>
+<blockquote>
+<p>Une nouvelle version d’image casse l’appli. Tu dois revenir rapidement à la version précédente.</p>
+</blockquote>
+<h3 id="15-s7-bootcamp-7-3-commandes-et-reflexes">7.3. Commandes et réflexes</h3>
+<pre><code class="language-bash"># Voir l’historique du deployment
+oc rollout history deployment/httpd-demo
+
+# Déployer une nouvelle image cassée (exemple)
+oc set image deployment/httpd-demo \
+  httpd-24=registry.../ubi8/httpd-24:badtag
+oc rollout status deployment/httpd-demo
+
+# Constat : pods en CrashLoopBackOff
+oc get pods
+oc describe pod &lt;pod&gt;
+
+# Rollback
+oc rollout undo deployment/httpd-demo
+oc rollout status deployment/httpd-demo
+
+# Vérifier la version d’image
+oc get deploy httpd-demo -o wide
+</code></pre>
+<h3 id="15-s7-bootcamp-7-4-a-retenir-ex280">7.4. À retenir EX280</h3>
+<ul>
+<li><code>oc rollout undo</code> est le réflexe si une nouvelle version foireuse.</li>
+<li>Toujours valider avec <code>oc rollout status</code>.</li>
+</ul>
+<hr>
+<h2 id="15-s7-bootcamp-brique-8---scenario-“build-from-git-template-imagestream”-pont-ex288">Brique 8 - Scénario “Build from Git + template/imagestream” (pont EX288)</h2>
+<h3 id="15-s7-bootcamp-8-1-concepts">8.1. Concepts</h3>
+<ul>
+<li>OpenShift facilite les workflows <strong>source → image → déploiement</strong> via :
+<ul>
+<li><code>BuildConfig</code></li>
+<li><code>ImageStream</code></li>
+<li><code>Deployment</code> ou <code>DeploymentConfig</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="15-s7-bootcamp-8-2-exemple-de-scenario">8.2. Exemple de scénario</h3>
+<blockquote>
+<p>À partir d’un dépôt Git simple, tu dois créer un BuildConfig, image en registry interne, puis déployer via Deployment/Route.</p>
+</blockquote>
+<h3 id="15-s7-bootcamp-8-3-commandes-et-reflexes">8.3. Commandes et réflexes</h3>
+<pre><code class="language-bash"># Créer un BuildConfig depuis Git
+oc new-build https://github.com/tonorg/tonrepo.git \
+  --name=myapp \
+  --strategy=source
+
+oc get bc
+oc start-build myapp --follow
+
+# ImageStream
+oc get is
+
+# Déployer depuis l’ImageStream
+oc new-app myapp:latest --name=myapp-deploy
+
+# Exposer en service + route
+oc expose deployment myapp-deploy --port=8080
+oc expose service myapp-deploy
+
+oc get route
+</code></pre>
+<h3 id="15-s7-bootcamp-8-4-a-retenir-ex288">8.4. À retenir EX288</h3>
+<ul>
+<li><code>oc new-build</code> + <code>oc start-build</code> + <code>ImageStream</code> → pipeline simple source→image→déploiement.</li>
+<li>Comprendre la chaîne complète, même si tu ne fais qu’un cas simple.</li>
+</ul>
+<hr>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Semaine 8 - Pré‑exam &amp; examens blancs</p>
+<h2 id="16-s8-preexam-examblanc-organisation">Organisation</h2>
+<ul>
+<li><strong>J1-J3</strong> : scénarios “du chaos” (3-4 h) couvrant la plupart des briques EX280.</li>
+<li><strong>J4-J5</strong> : 2 examens blancs complets (3 h chacun).</li>
+<li><strong>J6</strong> : consolidation / fiches de synthèse.</li>
+<li><strong>J7</strong> : répétition finale.</li>
+</ul>
+<hr>
+<h2 id="16-s8-preexam-examblanc-brique-9---scenarios-“chaos”-j1-j3">Brique 9 - Scénarios “Chaos” (J1-J3)</h2>
+<h3 id="16-s8-preexam-examblanc-9-1-principe">9.1. Principe</h3>
+<ol>
+<li>Cluster “cassé” (projet EX280 avec plusieurs pannes mélangées).</li>
+<li>Tu dois <strong>diagnostiquer</strong> puis <strong>réparer</strong> dans un ordre logique.</li>
+</ol>
+<h3 id="16-s8-preexam-examblanc-9-2-checklist-typique-par-scenario">9.2. Checklist typique par scénario</h3>
+<pre><code class="language-bash"># 1. Contexte
+oc whoami
+oc project
+
+# 2. Pods &amp; événements
+oc get pods
+oc get events --sort-by=.lastTimestamp | tail -n 20
+
+# 3. Si pod en erreur
+oc describe pod &lt;pod&gt;
+oc logs &lt;pod&gt; [-c &lt;container&gt;]
+
+# 4. Vérifier Service/Endpoints/Route
+oc get svc,route,endpoints
+oc describe svc &lt;svc&gt;
+oc describe route &lt;route&gt;
+
+# 5. Vérifier quotas/limitranges
+oc get resourcequota,limitrange
+oc describe resourcequota
+
+# 6. Vérifier NetPol
+oc get networkpolicy
+oc describe networkpolicy
+
+# 7. Vérifier SCC/SA
+oc get sa
+oc get scc
+oc describe pod &lt;pod&gt; | sed -n '/Service Account:/p'
+
+# 8. Vérifier PV/PVC
+oc get pvc,pv
+oc describe pvc &lt;pvc&gt;
+</code></pre>
+<h3 id="16-s8-preexam-examblanc-9-3-objectif">9.3. Objectif</h3>
+<ul>
+<li>Utiliser <strong>toujours la même routine</strong> de diagnostic.</li>
+<li>Identifier <strong>rapidement</strong> la ou les causes racine.</li>
+</ul>
+<hr>
+<h2 id="16-s8-preexam-examblanc-brique-10---examens-blancs-j4-j5">Brique 10 - Examens blancs (J4-J5)</h2>
+<h3 id="16-s8-preexam-examblanc-10-1-format-suggere">10.1. Format suggéré</h3>
+<ul>
+<li>Durée : <strong>3 h</strong>.</li>
+<li>Contenu :
+<ul>
+<li>Création de projet.</li>
+<li>Déploiement d’applications.</li>
+<li>ConfigMap/Secret.</li>
+<li>Routes/TLS.</li>
+<li>PV/PVC.</li>
+<li>RBAC/SCC/NetPol.</li>
+<li>Quotas/LimitRange.</li>
+<li>Rollout/rollback.</li>
+<li>(1 mini‑scénario Operator si possible).</li>
+</ul>
+</li>
+</ul>
+<h3 id="16-s8-preexam-examblanc-10-2-strategie-pendant-l’examen-blanc">10.2. Stratégie pendant l’examen blanc</h3>
+<ol>
+<li>Lire tout l’énoncé <strong>une fois</strong>.</li>
+<li>Numéroter les tâches (T1, T2, …).</li>
+<li>Commencer par les <strong>tâches rapides et sûres</strong> (projets, ConfigMap, Secrets, etc.).</li>
+<li>Garder le temps pour les tâches à panne (NetPol, SCC, quotas).</li>
+<li>À chaque tâche, valider avec 1-2 commandes (<code>oc get</code>, <code>oc describe</code>, <code>curl</code> si besoin).</li>
+</ol>
+<hr>
+<h2 id="16-s8-preexam-examblanc-brique-11---consolidation-j6">Brique 11 - Consolidation (J6)</h2>
+<h3 id="16-s8-preexam-examblanc-11-1-fiches-de-synthese-a-preparer">11.1. Fiches de synthèse à préparer</h3>
+<ol>
+<li>
+<p><strong>Playbook EX280 ultra‑court</strong> (1 page) avec :</p>
+<ul>
+<li>Création projet / user / groupe / RBAC.</li>
+<li>Déploiement appli + Service + Route.</li>
+<li>ConfigMap / Secret / env.</li>
+<li>Probes + ressources.</li>
+<li>PV/PVC.</li>
+<li>Quotas / LimitRange.</li>
+<li>SCC / ServiceAccount.</li>
+<li>NetworkPolicy.</li>
+<li>Routes/TLS.</li>
+<li>Rollout / rollback.</li>
+</ul>
+</li>
+<li>
+<p><strong>Tableau mental</strong> : problème → zone à vérifier</p>
+<ul>
+<li>Pod <code>ImagePullBackOff</code> → image, pull secret, registry.</li>
+<li>Pod <code>CrashLoopBackOff</code> → logs conteneur, config appli.</li>
+<li>Pod <code>Pending</code> → quota, SCC, PVC Pending.</li>
+<li>Route 503 → service/endpoint.</li>
+<li>App inaccessible entre namespaces → NetPol.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="16-s8-preexam-examblanc-brique-12---repetition-finale-j7">Brique 12 - Répétition finale (J7)</h2>
+<h3 id="16-s8-preexam-examblanc-12-1-scenario-unique-complet">12.1. Scénario unique complet</h3>
+<blockquote>
+<p>En 2-3 h, bâtir <strong>de zéro</strong> un projet complet :</p>
+<ul>
+<li>Projet dédié.</li>
+<li>User + groupe + RBAC.</li>
+<li>App déployée (Deployment).</li>
+<li>Service + Route + (TLS si possible).</li>
+<li>ConfigMap/Secret.</li>
+<li>Probes + ressources.</li>
+<li>PV/PVC pour la persistance.</li>
+<li>LimitRange + ResourceQuota.</li>
+<li>NetworkPolicy simple.</li>
+<li>Incident simulé (quota ou SCC) à corriger.</li>
+</ul>
+</blockquote>
+<h3 id="16-s8-preexam-examblanc-12-2-objectif">12.2. Objectif</h3>
+<ul>
+<li>Tourner en boucle sur <strong>toute la panoplie EX280</strong>.</li>
+<li>Sortir de J7 avec un <strong>chemin mental</strong> clair pour le jour de l’examen.</li>
+</ul>
+<hr>
+<h2 id="16-s8-preexam-examblanc-mantra-final">Mantra final</h2>
+<ol>
+<li><strong>Toujours commencer par <code>oc project</code>, <code>oc get pods</code>, <code>oc get events</code>.</strong></li>
+<li>Un seul outil de plus en cas de doute : <code>oc describe</code>.</li>
+<li>Ne jamais paniquer sur les messages d’erreur : les lire <strong>en entier</strong>, surtout la fin.</li>
+<li>Traiter en priorité ce qui empêche l’appli de tourner (pods/route/pvc), ensuite seulement le “beau”.</li>
+<li>Répéter jusqu’à ce que les commandes sortent <strong>sans réfléchir</strong>.</li>
+</ol>
+
+<hr />
+</section>
+<hr />
+<section class="chapter">
+<hr />
+<p># Annexes</p>
+<h2 id="90-annexes-annexe-a---reflexes-s5-s6-securite-reseau-operators-troubleshooting">Annexe A - Réflexes S5-S6 (sécurité/réseau/operators/troubleshooting)</h2>
+<blockquote>
+<p>Source : ex_280_s_5_s_6_securite_reseau_operators_troubleshooting.md</p>
+</blockquote>
+<h2 id="90-annexes-annexe-b---checklist-mentale-s3-s4">Annexe B - Checklist mentale S3-S4</h2>
+<blockquote>
+<p>Source : ex_280_s_3_s_4_open_shift_lab_guide.md - “Synthèse Semaine 3-4”.</p>
+</blockquote>
+
+<hr />
+</section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      const filter = document.getElementById("filter");
+      const toc = document.getElementById("toc");
+      const links = Array.from(toc.querySelectorAll(".toc-item"));
+
+      // filtre TOC
+      filter.addEventListener("input", () => {
+        const q = filter.value.trim().toLowerCase();
+        for (const a of links) {
+          const ok = !q || a.textContent.toLowerCase().includes(q);
+          a.style.display = ok ? "" : "none";
+        }
+      });
+
+      // scroll doux + URL hash
+      toc.addEventListener("click", (e) => {
+        const a = e.target.closest("a.toc-item");
+        if (!a) return;
+        const id = a.getAttribute("data-target");
+        const el = document.getElementById(id);
+        if (!el) return;
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", "#" + id);
+      });
+
+      // highlight section active
+      const headings = Array.from(document.querySelectorAll("h1[id], h2[id], h3[id]"));
+      const byId = new Map(links.map(a => [a.getAttribute("data-target"), a]));
+
+      function setActive(id){
+        for (const a of links) a.classList.remove("active");
+        const a = byId.get(id);
+        if (a) a.classList.add("active");
+      }
+
+      if ("IntersectionObserver" in window) {
+        const obs = new IntersectionObserver((entries) => {
+          const visible = entries
+            .filter(e => e.isIntersecting)
+            .sort((a,b) => (b.intersectionRatio - a.intersectionRatio));
+          if (visible[0]) setActive(visible[0].target.id);
+        }, { threshold: [0.2, 0.35, 0.5, 0.7] });
+
+        headings.forEach(h => obs.observe(h));
+      }
+
+      if (location.hash) setActive(location.hash.slice(1));
+    })();
+  </script>
+</body>
+</html>

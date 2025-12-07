@@ -1,0 +1,12 @@
+flowchart TB
+  Start[Symptom observed] --> Scope[Confirm namespace + context]
+  Scope --> Events[oc get events / describe]
+  Events --> Status{Pod status?}
+  Status -- Pending --> Pending[Quota/Limit/Node capacity\ncheck messages]
+  Status -- CrashLoop --> Logs[oc logs --previous]
+  Status -- Running but broken --> Net[Service/Route/DNS/NetworkPolicy]
+  Pending --> Fix[Apply minimal fix]
+  Logs --> Fix
+  Net --> Fix
+  Fix --> Verify[Re-test + re-check events]
+  Verify --> End[Done + note the command]

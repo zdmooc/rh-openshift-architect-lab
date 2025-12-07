@@ -1,0 +1,16 @@
+manuscript/00-intro.md
+manuscript/01-f0-why-openshift.md
+manuscript/02-f1-essentials-objects.md
+manuscript/03-f2-network.md
+manuscript/04-f3-resources-quotas.md
+manuscript/05-f4-security-rbac-scc.md
+manuscript/06-f5-operators-olm.md
+manuscript/07-f6-troubleshooting.md
+manuscript/10-s1-labs.md
+manuscript/11-s2-labs.md
+manuscript/12-s3-guide-lab.md
+manuscript/13-s4-guide-lab.md
+manuscript/14-s5-s6-labs.md
+manuscript/15-s7-bootcamp.md
+manuscript/16-s8-preexam-examblanc.md
+manuscript/90-annexes.md

@@ -1,0 +1,7 @@
+﻿flowchart TB
+  PodSpec["Pod spec"] --> SA["ServiceAccount"]
+  SA --> SCCs["Allowed SCCs for SA"]
+  SCCs --> Check{Matches constraints?}
+  Check -- No --> Deny["Rejected: forbidden / unable to validate"]
+  Check -- Yes --> Admit["Admitted"]
+  Check --> Constraints["Constraints: runAsUser, fsGroup, capabilities, seccomp, volumes"]

@@ -1,0 +1,6 @@
+flowchart LR
+  User[User] -->|member of| Group[Group]
+  Group --> RB[RoleBinding]
+  RB --> Role[Role / ClusterRole]
+  Role --> Perms[Verbs on Resources\nget/list/watch/create...]
+  Perms --> NS[Namespace Scope]

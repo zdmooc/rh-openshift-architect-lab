@@ -1,0 +1,7 @@
+﻿flowchart TB
+  Src["Source / Image"] --> Build["Build / ImageStream import"]
+  Build --> Deploy["Deployment created/updated"]
+  Deploy --> RS["ReplicaSet"]
+  RS --> Pod["Pod(s)"]
+  Pod --> Svc["Service"]
+  Svc --> Route["Route"]

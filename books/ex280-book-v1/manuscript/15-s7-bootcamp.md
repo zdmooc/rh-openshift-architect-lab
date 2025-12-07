@@ -1,0 +1,379 @@
+﻿# Semaine 7 - Bootcamp EX280 (micro‑scénarios)
+
+## Organisation
+
+- **J1-J3** : 4-6 micro‑scénarios/jour (10-20 min chacun).
+- **J4-J5** : scénarios longs (2-3 h) avec enchaînement de tâches.
+- **J6-J7** : focus sur les faiblesses + 1 scénario “build from Git” (pont EX288).
+
+Chaque micro‑scénario doit avoir :
+
+1. **Énoncé court** (1 ou 2 phrases).
+2. **Objectif** clair.
+3. **Critères de réussite** (ce que tu dois vérifier/montrer).
+
+---
+
+## Brique 1 - Scénarios “Users/Groups/RBAC”
+
+### 1.1. Concepts
+
+- **User** : identité humaine ou technique (souvent gérée via IdP, mais pour l’exam tu as parfois des users locaux).
+- **Group** : ensemble de users, pratique pour leur donner des rôles en une fois.
+- **RBAC** : attribution de rôles (`view`, `edit`, `admin`, roles custom) à des users ou groupes dans un projet.
+
+### 1.2. Exemple de scénario
+
+> Créer un user développeur pour un projet, l’ajouter à un groupe, et lui donner les droits pour déployer dans un namespace donné.
+
+### 1.3. Commandes et réflexes
+
+```bash
+# Vérifier où tu es
+oc project
+
+# Vérifier les utilisateurs (HTPasswd / cluster)
+oc get users
+oc get groups
+
+# Créer un groupe (si besoin)
+oc adm groups new dev-ex280
+
+# Ajouter un user dans un groupe
+oc adm groups add-users dev-ex280 zidane
+
+# Donner des droits dans le namespace ex280-lab02
+oc adm policy add-role-to-user edit zidane -n ex280-lab02
+# ou via groupe
+oc adm policy add-role-to-group edit dev-ex280 -n ex280-lab02
+
+# Vérification RBAC
+oc auth can-i create deployment -n ex280-lab02 --as=zidane
+oc auth can-i get pods -n ex280-lab02 --as=zidane
+```
+
+### 1.4. À retenir EX280
+
+- `oc adm policy add-role-to-user` / `add-role-to-group` sont les réflexes pour RBAC.
+- `oc auth can-i` pour vérifier les droits, avec `--as=` si besoin de simuler un user.
+
+---
+
+## Brique 2 - Scénarios “SCC / ServiceAccount”
+
+### 2.1. Concepts
+
+- **ServiceAccount (SA)** : identité utilisée par les pods pour accéder à l’API et aux ressources.
+- **SCC (Security Context Constraints)** : mécanisme spécifique OpenShift pour contrôler ce que les pods ont le droit de faire (UID, capabilities, volumes, etc.).
+
+### 2.2. Exemple de scénario
+
+> Un pod ne démarre pas à cause de la SCC. Diagnostiquer puis corriger proprement (sans donner plus de droits que nécessaire).
+
+### 2.3. Commandes et réflexes
+
+```bash
+# Voir les événements du namespace
+oc get events --sort-by=.lastTimestamp | tail -n 20
+
+# Voir pourquoi un pod est bloqué
+oc describe pod <pod>
+
+# Lister les SCC
+oc get scc
+oc describe scc restricted
+
+# Lister les SA du projet
+oc get sa
+
+# Associer une SCC à une SA
+oc adm policy add-scc-to-user anyuid -z httpd-sa -n ex280-lab02
+# (ou utiliser une SCC plus restrictive fournie par l’énoncé)
+
+# Vérifier la SA utilisée par un déploiement
+oc get deploy httpd-demo -o yaml | sed -n '/serviceAccountName:/p'
+```
+
+### 2.4. À retenir EX280
+
+- Lire le message d’erreur dans `oc describe pod` (section **Events**).
+- Savoir attacher une SCC à une SA via `oc adm policy add-scc-to-user`.
+- Ne pas utiliser systématiquement `anyuid` en prod réelle, mais en EX280 tu dois maîtriser la mécanique.
+
+---
+
+## Brique 3 - Scénarios “Quotas / LimitRange”
+
+### 3.1. Concepts
+
+- **ResourceQuota** : limite globale de ressources (CPU, mémoire, pods, PVC, etc.) par projet.
+- **LimitRange** : valeurs par défaut / bornes min/max pour CPU/mémoire par pod ou conteneur.
+
+### 3.2. Exemple de scénario
+
+> Un développeur ne peut plus créer de pods dans un projet. Tu dois diagnostiquer et adapter le quota.
+
+### 3.3. Commandes et réflexes
+
+```bash
+# Vérifier les ResourceQuota et LimitRange
+oc get resourcequota
+oc describe resourcequota
+
+oc get limitrange
+oc describe limitrange
+
+# Essayer de créer un pod simple (pour reproduire l’erreur)
+oc run test-quota \
+  --image=registry.access.redhat.com/ubi8/httpd-24 \
+  --restart=Never
+
+# Lire l’erreur
+# Error from server (Forbidden): exceeded quota: ...
+
+# Adapter le quota (YAML)
+oc edit resourcequota compute-quota
+
+# Vérifier les valeurs Used/Hard
+oc describe resourcequota compute-quota
+```
+
+### 3.4. À retenir EX280
+
+- Le message **exceeded quota** est très typique → regarder `ResourceQuota`.
+- Adapter proprement le YAML (et pas tout supprimer).
+
+---
+
+## Brique 4 - Scénarios “NetworkPolicy”
+
+### 4.1. Concepts
+
+- Sans NetworkPolicy : trafic autorisé entre tous les pods.
+- Avec des NetworkPolicies : les pods correspondants à `podSelector` sont isolés pour les directions définies.
+- On joue sur :
+  - `podSelector` / `namespaceSelector` / `ipBlock`.
+  - `ingress` / `egress`.
+
+### 4.2. Exemple de scénario
+
+> Une appli ne peut plus appeler un service dans un autre namespace après mise en place de NetPol. Trouver et corriger la politique.
+
+### 4.3. Commandes et réflexes
+
+```bash
+# Voir les NetPol dans le namespace
+oc get networkpolicy
+oc describe networkpolicy <nom>
+
+# Repérer l’existence d’un deny-all
+oc get networkpolicy
+# Exemple : default-deny-all
+
+# Tester la connectivité depuis un pod
+oc exec -it <pod> -- curl -sS http://service:8080 || echo "KO"
+
+# Exemple de NetPol d’ouverture ciblée
+cat << 'EOF' > allow-httpd-from-namespace.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-httpd-from-same-namespace
+spec:
+  podSelector:
+    matchLabels:
+      app: httpd-demo
+  ingress:
+  - from:
+    - podSelector: {}
+    ports:
+    - protocol: TCP
+      port: 8080
+EOF
+
+oc apply -f allow-httpd-from-namespace.yaml
+```
+
+### 4.4. À retenir EX280
+
+- Penser **NetPol** dès que “ ça ping mais ça curl pas ”.
+- Combiner `oc describe networkpolicy` + tests `curl`.
+
+---
+
+## Brique 5 - Scénarios “Routes / TLS / Services”
+
+### 5.1. Concepts
+
+- **Service** : IP virtuelle interne qui expose un ensemble de pods.
+- **Route** : objet OpenShift qui expose un Service au monde extérieur via le router (HTTP/HTTPS).
+- Modes TLS (à pratiquer) :
+  - `edge`, `passthrough`, `reencrypt`.
+
+### 5.2. Exemple de scénario
+
+> Une route renvoie 503 ou ne résout pas. Diagnostiquer, corriger soit la route, soit le service, soit les endpoints.
+
+### 5.3. Commandes et réflexes
+
+```bash
+# Routes
+oc get route
+oc describe route <nom>
+
+# Services
+oc get svc
+oc describe svc <nom>
+
+# Endpoints
+oc get endpoints
+oc get endpoints <nom> -o yaml
+
+# Vérifier que les labels du Service matchent ceux des pods
+oc get pods --show-labels
+oc describe svc httpd-demo | sed -n '/Selector:/,/Endpoints:/p'
+
+# TLS (edge typiquement)
+oc create route edge httpd-tls \
+  --service=httpd-demo \
+  --cert=cert.crt --key=cert.key --ca-cert=ca.crt
+```
+
+### 5.4. À retenir EX280
+
+- Un 503 sur route OpenShift = souvent **pas d’endpoint** ou **mauvais selector**.
+- Lire la section Selector/Endpoints du Service.
+
+---
+
+## Brique 6 - Scénarios “PV/PVC + StatefulSet”
+
+### 6.1. Concepts
+
+- **PV (PersistentVolume)** : volume (souvent fourni par un storage backend) visible à l’échelle cluster.
+- **PVC (PersistentVolumeClaim)** : demande de stockage par un namespace.
+- **StatefulSet** : contrôleur pour workloads avec identité stable et stockage persistant.
+
+### 6.2. Exemple de scénario
+
+> Une base simple (statefulset) ne démarre pas parce que le PVC est Pending. Tu dois diagnostiquer et corriger.
+
+### 6.3. Commandes et réflexes
+
+```bash
+# Voir PV/PVC
+oc get pv
+oc get pvc
+oc describe pvc pvc-httpd-data
+
+# Vérifier la StorageClass
+oc get storageclass
+
+# Debugger un PVC Pending
+oc describe pvc <nom>
+# Regarder les events liés au provisioner
+
+# StatefulSet
+oc get statefulset
+oc describe statefulset <nom>
+
+# Vérifier que le volumeClaimTemplates pointe sur une StorageClass existante
+oc get statefulset <nom> -o yaml | sed -n '/volumeClaimTemplates:/,/containers:/p'
+```
+
+### 6.4. À retenir EX280
+
+- `STATUS=Pending` sur PVC = problème StorageClass / provisioner.
+- `describe pvc` montre les events et la cause (ex : storageclass inconnue).
+
+---
+
+## Brique 7 - Scénarios “Update / Rollback”
+
+### 7.1. Concepts
+
+- `Deployment` garde un historique des révisions (replicaSets).
+- `oc rollout history` permet de voir ces révisions.
+- `oc rollout undo` permet de revenir à la version précédente.
+
+### 7.2. Exemple de scénario
+
+> Une nouvelle version d’image casse l’appli. Tu dois revenir rapidement à la version précédente.
+
+### 7.3. Commandes et réflexes
+
+```bash
+# Voir l’historique du deployment
+oc rollout history deployment/httpd-demo
+
+# Déployer une nouvelle image cassée (exemple)
+oc set image deployment/httpd-demo \
+  httpd-24=registry.../ubi8/httpd-24:badtag
+oc rollout status deployment/httpd-demo
+
+# Constat : pods en CrashLoopBackOff
+oc get pods
+oc describe pod <pod>
+
+# Rollback
+oc rollout undo deployment/httpd-demo
+oc rollout status deployment/httpd-demo
+
+# Vérifier la version d’image
+oc get deploy httpd-demo -o wide
+```
+
+### 7.4. À retenir EX280
+
+- `oc rollout undo` est le réflexe si une nouvelle version foireuse.
+- Toujours valider avec `oc rollout status`.
+
+---
+
+## Brique 8 - Scénario “Build from Git + template/imagestream” (pont EX288)
+
+### 8.1. Concepts
+
+- OpenShift facilite les workflows **source → image → déploiement** via :
+  - `BuildConfig`
+  - `ImageStream`
+  - `Deployment` ou `DeploymentConfig`
+
+### 8.2. Exemple de scénario
+
+> À partir d’un dépôt Git simple, tu dois créer un BuildConfig, image en registry interne, puis déployer via Deployment/Route.
+
+### 8.3. Commandes et réflexes
+
+```bash
+# Créer un BuildConfig depuis Git
+oc new-build https://github.com/tonorg/tonrepo.git \
+  --name=myapp \
+  --strategy=source
+
+oc get bc
+oc start-build myapp --follow
+
+# ImageStream
+oc get is
+
+# Déployer depuis l’ImageStream
+oc new-app myapp:latest --name=myapp-deploy
+
+# Exposer en service + route
+oc expose deployment myapp-deploy --port=8080
+oc expose service myapp-deploy
+
+oc get route
+```
+
+### 8.4. À retenir EX288
+
+- `oc new-build` + `oc start-build` + `ImageStream` → pipeline simple source→image→déploiement.
+- Comprendre la chaîne complète, même si tu ne fais qu’un cas simple.
+
+---
+
+
+
+

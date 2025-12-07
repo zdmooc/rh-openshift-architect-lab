@@ -1,0 +1,6 @@
+flowchart LR
+  NS[Namespace] --> DAll[Deny-all policy]
+  DAll --> DNS[Allow DNS egress]
+  DAll --> AppIn[Allow ingress to app\nfrom allowed sources]
+  DNS --> OK[Pods can resolve names]
+  AppIn --> OK2[Traffic reaches app]

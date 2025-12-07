@@ -1,0 +1,7 @@
+flowchart LR
+  Cat[CatalogSource] --> Sub[Subscription]
+  Sub --> CSV[ClusterServiceVersion]
+  CSV --> CRD[CRDs installed]
+  CRD --> CR[Custom Resource created]
+  CR --> Op[Operator reconciles]
+  Op --> App[Operands / App resources\nDeployments, Services, etc.]
