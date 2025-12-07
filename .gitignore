@@ -1,0 +1,14 @@
+# Node.js / NPM
+**/node_modules/
+
+# Fichiers de log / cache
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+**/.cache/
+
+# Build du livre EX280
+books/ex280-book-v1/Book/
+books/ex280-book-v1/dist/
+books/ex280-book-v1/out/
+books/ex280-book-v1/.tmp/
