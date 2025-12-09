@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: s7-test-pod-ok
+  namespace: ex280-lab02
+spec:
+  restartPolicy: Never
+  containers:
+  - name: httpd
+    image: registry.access.redhat.com/ubi8/httpd-24
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "128Mi"
+      requests:
+        cpu: "50m"
+        memory: "64Mi"

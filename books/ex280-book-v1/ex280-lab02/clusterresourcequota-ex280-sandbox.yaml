@@ -1,0 +1,16 @@
+apiVersion: quota.openshift.io/v1
+kind: ClusterResourceQuota
+metadata:
+  name: crq-ex280-sandbox
+spec:
+  quota:
+    hard:
+      requests.cpu: "2"
+      requests.memory: "4Gi"
+      limits.cpu: "4"
+      limits.memory: "8Gi"
+      pods: "10"
+  selector:
+    labels:
+      matchLabels:
+        env: sandbox

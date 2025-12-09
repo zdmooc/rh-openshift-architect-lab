@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: s8-curl-route-ok
+  namespace: ex280-lab02
+spec:
+  restartPolicy: Never
+  containers:
+  - name: curl
+    image: registry.access.redhat.com/ubi8/ubi
+    command:
+      - curl
+      - -s
+      - -o
+      - /dev/null
+      - -w
+      - "%{http_code}\n"
+      - http://httpd-demo-ex280-lab02.apps-crc.testing
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "128Mi"
+      requests:
+        cpu: "50m"
+        memory: "64Mi"

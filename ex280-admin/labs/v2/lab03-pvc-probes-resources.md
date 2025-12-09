@@ -1,21 +1,28 @@
-# Lab03 — PVC, Probes & Resources
+# Lab03 — PVC, Probes, Resources & (option) PV manuel
 
 ## Objectif
+
 - Créer un PVC.
 - Monter le PVC dans un pod httpd.
 - Configurer requests/limits CPU/mémoire.
 - Ajouter liveness/readiness probes.
+- (Option) Créer un PV manuel (hostPath) pour comprendre le binding.
 
 ## Pré-requis
+
 - Lab02 OK.
 
-## Steps
+---
 
-### Step 1 — Projet
+## Partie A — PVC + Deployment + Probes
+
+### Step A1 — Projet
+
     oc get project ex280-lab03-pvc-zidane || oc new-project ex280-lab03-pvc-zidane
     oc project ex280-lab03-pvc-zidane
 
-### Step 2 — PVC
+### Step A2 — PVC
+
     cat << 'YAML' | oc apply -f -
     apiVersion: v1
     kind: PersistentVolumeClaim
@@ -29,7 +36,11 @@
           storage: 1Gi
     YAML
 
-### Step 3 — Deployment avec PVC + probes + ressources
+    oc get pvc
+    oc describe pvc web-pvc
+
+### Step A3 — Deployment avec PVC + probes + ressources
+
     cat << 'YAML' | oc apply -f -
     apiVersion: apps/v1
     kind: Deployment
@@ -78,20 +89,72 @@
               claimName: web-pvc
     YAML
 
-## Vérifications
+    oc get pods
+    oc describe pod -l app=web-pvc
+
+---
+
+## Partie B — (Option) PV manuel (hostPath) pour CRC
+
+> À utiliser si tu veux comprendre le lien PV/PVC. Peut casser si les permissions hostPath sont mauvaises.
+
+### Step B1 — Créer un PV hostPath (sur CRC)
+
+    cat << 'YAML' | oc apply -f -
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: ex280-lab03-pv-manual
+    spec:
+      capacity:
+        storage: 1Gi
+      accessModes:
+        - ReadWriteOnce
+      hostPath:
+        path: /mnt/ex280-lab03-pv-manual
+      persistentVolumeReclaimPolicy: Delete
+    YAML
+
+    oc get pv
+    oc describe pv ex280-lab03-pv-manual
+
+### Step B2 — Lier le PVC au PV
+
+    # Ajuster le PVC si besoin pour matcher la storageClass / mode
+    oc describe pvc web-pvc
+
+    # Vérifier que le PVC passe à Bound sur le PV manuel
     oc get pvc
+    oc describe pvc web-pvc
+
+---
+
+## Vérifications
+
+    oc get pvc
+    oc describe pvc web-pvc
     oc get pods
     oc describe pod -l app=web-pvc
     oc logs -l app=web-pvc || true
 
 Critères :
-- PVC `Bound`
-- Pod `Running`
+
+- PVC `web-pvc` en `Bound`
+- Pod `web-pvc` en `Running`
 - Pas de redémarrages répétés (probes OK)
 
+---
+
 ## Cleanup (optionnel)
+
     oc delete project ex280-lab03-pvc-zidane --ignore-not-found
+    # Si PV manuel créé :
+    # oc delete pv ex280-lab03-pv-manual --ignore-not-found
+
+---
 
 ## Pièges fréquents
+
 - PVC `Pending` → `oc describe pvc web-pvc`
 - Probes trop agressives → augmenter `initialDelaySeconds`
+- PV hostPath : attention aux permissions sur le nœud

@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+  namespace: ex280-lab02
+spec:
+  podSelector: {}           # tous les pods du namespace
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector: {}       # depuis tous les pods du même namespace

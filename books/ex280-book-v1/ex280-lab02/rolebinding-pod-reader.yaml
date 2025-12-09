@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pod-reader-httpd-sa
+  namespace: ex280-lab02
+subjects:
+- kind: ServiceAccount
+  name: httpd-sa
+  namespace: ex280-lab02
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io

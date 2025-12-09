@@ -1,32 +1,53 @@
-# Lab EX280‑02 – Déployer, exposer et configurer une application
+# Lab02 — Deploy, Service, Route & Config
 
 ## Objectif
+- Déployer une appli HTTP.
+- L’exposer via Service + Route.
+- Injecter config via ConfigMap + Secret.
 
-Savoir déployer une application simple, l’exposer via un service/route
-et gérer sa configuration avec ConfigMap/Secret.
+## Pré-requis
+- Lab01 OK.
 
-## Scénario
+## Steps
 
-1. Dans le projet `ex280-dev` :
-   - Déployer une application HTTP (par exemple image UBI httpd ou nginx).
-   - S’assurer qu’elle est en `Deployment` avec au moins 2 replicas.
+### Step 1 — Projet
+    oc get project ex280-lab02-app-zidane || oc new-project ex280-lab02-app-zidane
+    oc project ex280-lab02-app-zidane
 
-2. Créer :
-   - un `Service` pour l’exposer dans le cluster,
-   - une `Route` pour l’exposer vers l’extérieur.
+### Step 2 — ConfigMap + Secret
+    oc create configmap app-config --from-literal=APP_MESSAGE="Hello EX280"
+    oc create secret generic app-secret --from-literal=APP_PASSWORD="changeme"
 
-3. Ajouter une page de configuration :
-   - Créer un `ConfigMap` contenant un message (par ex. `WELCOME_MSG`).
-   - Monter ce ConfigMap dans le pod (en variable d’environnement ou fichier).
-   - Vérifier que la page renvoie ce message.
+### Step 3 — Deployment
+    oc create deployment web --image=registry.access.redhat.com/ubi8/httpd-24 --port=8080
 
-4. Ajouter un mot de passe en `Secret` :
-   - Créer un `Secret` avec un mot de passe d’admin.
-   - Monter le secret en variable d’environnement (ou fichier).
-   - Vérifier qu’il n’apparaît pas en clair dans les logs.
+    oc set env deployment/web \
+      APP_MESSAGE_FROM_CM="$(oc get cm app-config -o jsonpath='{.data.APP_MESSAGE}')" \
+      APP_PASSWORD_FROM_SECRET="$(oc get secret app-secret -o jsonpath='{.data.APP_PASSWORD}' | base64 -d)"
 
-## Points clés
+### Step 4 — Service + Route
+    oc expose deployment/web --name=web-svc
+    oc expose svc/web-svc
 
-- `oc new-app` ou `oc create deployment` + `oc expose`.
-- Différence ConfigMap vs Secret.
-- Gestion du rollout (`oc rollout status`, `oc rollout history`).
+### Step 5 — Test HTTP
+    oc get all
+    oc get route
+    ROUTE_URL="http://$(oc get route web-svc -o jsonpath='{.spec.host}')"
+    curl -k "$ROUTE_URL" || true
+
+## Vérifications
+    oc get deployment web
+    oc get svc web-svc
+    oc get route web-svc
+    curl -k "$ROUTE_URL" || true
+
+Critères :
+- Deployment, Service, Route présents
+- HTTP 200 ou page servie via la route
+
+## Cleanup (optionnel)
+    oc delete project ex280-lab02-app-zidane --ignore-not-found
+
+## Pièges fréquents
+- Image non trouvée → `oc describe pod ...`
+- Route KO → vérifier `oc get route`, `oc get pods -o wide`, `oc logs -l app=web`

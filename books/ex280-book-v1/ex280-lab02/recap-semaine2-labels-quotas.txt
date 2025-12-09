@@ -1,0 +1,33 @@
+Semaine 2 – Récap labels / annotations / LimitRange / ResourceQuota (projet ex280-lab02)
+
+1) Labels et selectors
+- Les labels sont des métadonnées clés/valeurs utilisées pour organiser et filtrer les objets.
+- Exemple: app=httpd-demo, env=dev, tier=frontend, owner=zidane.
+- oc get pods -l app=httpd-demo          -> filtre sur les labels.
+- Le Service httpd-demo utilise Selector: app=httpd-demo pour router vers les bons pods.
+- -L app,env,tier,owner                  -> affiche ces labels en colonnes (inventaire lisible).
+
+2) Annotations
+- Métadonnées libres (non utilisées pour le routage/filtrage).
+- Exemple: description="Frontend httpd pour EX280", support-contact="zidane.djamal@example.com".
+- Elles se voient surtout avec: oc describe deploy|svc ...
+
+3) LimitRange
+- Appliqué au namespace, type: Container.
+- Définit des valeurs par défaut pour cpu/memory si le pod n’en déclare pas.
+- Ici: defaultRequest=50m/64Mi, default=200m/256Mi.
+- Effet: le déploiement demo-nores, sans resources, reçoit automatiquement ces requests/limits.
+
+4) ResourceQuota
+- Suit un “budget” de ressources au niveau du namespace (Used vs Hard).
+- Ici: requests.cpu/memory, limits.cpu/memory, pods.
+- oc get resourcequota                    -> vue compacte (Used/Hard).
+- oc describe resourcequota compute-quota -> détail.
+- Si une création de pod dépasse le quota: erreur Forbidden (exceeded quota) et le pod n’est pas créé.
+- Quand on scale ou supprime des pods, la colonne Used est recalculée.
+
+5) Impact concret sur les pods
+- Pods existants avec leurs resources explicites ne changent pas quand on crée un LimitRange.
+- Les pods nouveaux sans resources héritent des defaultRequest/default du LimitRange.
+- Le ResourceQuota bloque la création/scale si les nouveaux pods feraient dépasser le budget CPU/mémoire/nombre de pods.
+

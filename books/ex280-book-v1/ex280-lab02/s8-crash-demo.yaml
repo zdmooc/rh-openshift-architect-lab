@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s8-crash-demo
+  namespace: ex280-lab02
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: s8-crash-demo
+  template:
+    metadata:
+      labels:
+        app: s8-crash-demo
+    spec:
+      containers:
+      - name: crash
+        image: registry.access.redhat.com/ubi8/ubi
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Starting crash demo"
+          sleep 5
+          echo "Now exiting with error"
+          exit 1

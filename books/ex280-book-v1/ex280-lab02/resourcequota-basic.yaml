@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+spec:
+  hard:
+    requests.cpu: "200m"
+    requests.memory: "256Mi"
+    limits.cpu: "500m"
+    limits.memory: "640Mi"
+    pods: "4"
