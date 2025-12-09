@@ -1,0 +1,43 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ex288-template
+parameters:
+- name: APP_NAME
+  value: ex288
+- name: MSG
+  value: hello-template
+objects:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata: { name: ex288-config }
+  data: { msg: '' }
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata: { name:  }
+  spec:
+    replicas: 1
+    selector: { app:  }
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames: []
+        from: { kind: ImageStreamTag, name: :latest }
+    template:
+      metadata: { labels: { app:  } }
+      spec:
+        containers:
+        - name: 
+          image: ""
+          ports: [{ containerPort: 8080 }]
+          env: [{ name: APP_NAME, value:  }]
+- apiVersion: v1
+  kind: Service
+  metadata: { name:  }
+  spec: { selector: { app:  }, ports: [{ port: 8080, targetPort: 8080 }] }
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata: { name:  }
+  spec: { to: { kind: Service, name:  }, port: { targetPort: 8080 } }

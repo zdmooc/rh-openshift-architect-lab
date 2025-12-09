@@ -1,0 +1,30 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: ex288
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: ex288
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/zdmooc/openshift-ex288.git
+      ref: main
+    contextDir: apps/nodejs-ex
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'nodejs:18-ubi9'
+        namespace: openshift
+  output:
+    to:
+      kind: ImageStreamTag
+      name: ex288:latest
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange

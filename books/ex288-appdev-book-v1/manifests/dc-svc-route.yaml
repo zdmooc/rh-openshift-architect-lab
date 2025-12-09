@@ -1,0 +1,59 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: ex288
+spec:
+  replicas: 1
+  selector:
+    app: ex288
+  strategy:
+    type: Rolling
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
+    imageChangeParams:
+      automatic: true
+      containerNames: [ex288]
+      from:
+        kind: ImageStreamTag
+        name: ex288:latest
+  template:
+    metadata:
+      labels:
+        app: ex288
+    spec:
+      containers:
+      - name: ex288
+        image: ""
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APP_NAME
+          value: ex288
+        - name: MSG
+          valueFrom:
+            configMapKeyRef:
+              name: ex288-config
+              key: msg
+        readinessProbe:
+          httpGet: { path: /, port: 8080 }
+          initialDelaySeconds: 5
+        livenessProbe:
+          httpGet: { path: /, port: 8080 }
+          initialDelaySeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ex288
+spec:
+  selector: { app: ex288 }
+  ports: [{ port: 8080, targetPort: 8080 }]
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ex288
+spec:
+  to: { kind: Service, name: ex288 }
+  port: { targetPort: 8080 }

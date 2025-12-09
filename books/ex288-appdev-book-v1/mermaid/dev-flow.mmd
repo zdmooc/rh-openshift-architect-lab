@@ -1,0 +1,5 @@
+flowchart LR
+  Git[(Repo code)] -->|webhook/oc start-build| BuildConfig
+  BuildConfig --> ImageStream
+  ImageStream -->|trigger| DeploymentConfig
+  DeploymentConfig --> Service --> Route

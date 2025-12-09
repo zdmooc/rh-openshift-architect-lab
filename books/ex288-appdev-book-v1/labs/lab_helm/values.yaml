@@ -1,0 +1,48 @@
+# IBM ODM Developer Edition – OpenShift CRC
+name: lab-helm
+namespace: lab-helm
+license: accept
+
+# OpenShift: ne pas forcer un UID spécifique
+customization:
+  runAsUser: ""
+
+# Base interne H2 sans persistance, avec jeux d’exemples
+internalDatabase:
+  persistence:
+    enabled: false
+    useDynamicProvisioning: false
+    resources:
+      requests:
+        storage: 2Gi
+  populateSampleData: true
+
+# Exposer via Route OpenShift
+service:
+  enableRoute: true
+  # hostname calculé par install.sh si laissé vide
+  hostname: ""
+  # Type de Service automatiquement ClusterIP si enableRoute=true
+  type: ClusterIP
+
+# Probes et ressources raisonnables pour CRC
+livenessProbe:
+  initialDelaySeconds: 300
+  periodSeconds: 10
+  failureThreshold: 10
+
+readinessProbe:
+  initialDelaySeconds: 45
+  periodSeconds: 5
+  failureThreshold: 45
+
+resources:
+  requests:
+    cpu: "1"
+    memory: "1024Mi"
+  limits:
+    cpu: "2"
+    memory: "2048Mi"
+
+# ServiceAccount explicite pour lier l’SCC
+serviceAccountName: odm-dev-sa
