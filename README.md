@@ -56,3 +56,8 @@ e dépôt contient aussi des “books” complets de préparation aux exams :
 - `books/ex280-book-v1/` : livre + labs pour **EX280 – OpenShift Administrator**.
 - `books/ex370-odf-book-v1/` : livre + labs pour **EX370 – OpenShift Data Foundation (ODF)**.
 - `books/ex380-openshift-automation-book-v1/` : labs structurés pour **EX380 – OpenShift Automation and Integration** (auth, backup/restore, partitionnement de cluster, GitOps, observabilité).
+
+- `books/ex280-book-v1/` : EX280 – OpenShift Administrator.
+- `books/ex288-appdev-book-v1/` : EX288 – OpenShift Application Developer (apps, labs, manifests, QCM, mermaid, scripts).
+- `books/ex370-odf-book-v1/` : EX370 – OpenShift Data Foundation.
+- `books/ex380-openshift-automation-book-v1/` : EX380 – Automation & Integration.
