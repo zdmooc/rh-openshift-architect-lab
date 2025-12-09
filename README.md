@@ -61,3 +61,19 @@ e dépôt contient aussi des “books” complets de préparation aux exams :
 - `books/ex288-appdev-book-v1/` : EX288 – OpenShift Application Developer (apps, labs, manifests, QCM, mermaid, scripts).
 - `books/ex370-odf-book-v1/` : EX370 – OpenShift Data Foundation.
 - `books/ex380-openshift-automation-book-v1/` : EX380 – Automation & Integration.
+
+## Volet Architecte OpenShift (plateforme)
+
+En plus des modules orientés certifications (ex280, ex288, ex370, ex380, ex480, ex482),
+ce dépôt contient un volet plateforme pour le travail d'architecture OpenShift :
+
+- docs/ARCHITECTURE.md : vue globale de la plateforme
+- docs/multi-cluster.md : scénarios multi-cluster et ACM
+- docs/gitops-platform.md : stratégie GitOps de la plateforme
+- docs/observability-sre.md : observabilité et pratiques SRE
+- docs/security-architecture.md : modèle de sécurité
+- docs/portfolio-architect.md : synthèse exploitable dans le CV
+- platform/gitops/ : manifests GitOps (Applications Argo CD, cluster-config)
+- platform/observability/ : exemples de ServiceMonitor, dashboards
+- platform/security/ : exemples de namespaces, RBAC, NetworkPolicy
+
