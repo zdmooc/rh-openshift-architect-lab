@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+name: ex280-demo-metrics
+namespace: ex280-lab
+labels:
+app: demo-metrics
+team: ex-labs
+spec:
+selector:
+matchLabels:
+app: demo-metrics
+namespaceSelector:
+matchNames:
+- ex280-lab
+endpoints:
+- port: http-metrics
+path: /metrics
+interval: 30s
