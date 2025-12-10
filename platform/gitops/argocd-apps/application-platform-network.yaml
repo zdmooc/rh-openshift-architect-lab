@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+name: platform-network
+namespace: openshift-gitops
+spec:
+project: default
+source:
+repoURL: [https://github.com/zdmooc/rh-openshift-architect-lab.git](https://github.com/zdmooc/rh-openshift-architect-lab.git)
+targetRevision: main
+path: platform/gitops/cluster-config/networkpolicies
+destination:
+server: [https://kubernetes.default.svc](https://kubernetes.default.svc)
+namespace: openshift-gitops
+syncPolicy:
+automated:
+prune: true
+selfHeal: true
+syncOptions:
+- CreateNamespace=true
