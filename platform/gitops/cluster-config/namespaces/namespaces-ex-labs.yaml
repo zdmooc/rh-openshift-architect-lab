@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+name: ex280-lab
+labels:
+env: lab
+track: ex280
+owner: zidane
+-------------
+
+apiVersion: v1
+kind: Namespace
+metadata:
+name: ex288-lab
+labels:
+env: lab
+track: ex288
+owner: zidane
+-------------
+
+apiVersion: v1
+kind: Namespace
+metadata:
+name: ex370-lab
+labels:
+env: lab
+track: ex370
+owner: zidane
+-------------
+
+apiVersion: v1
+kind: Namespace
+metadata:
+name: ex380-lab
+labels:
+env: lab
+track: ex380
+owner: zidane
+-------------
+
+apiVersion: v1
+kind: Namespace
+metadata:
+name: ex480-lab
+labels:
+env: lab
+track: ex480
+owner: zidane
+-------------
+
+apiVersion: v1
+kind: Namespace
+metadata:
+name: ex482-lab
+labels:
+env: lab
+track: ex482
+owner: zidane
+-------------
+
+apiVersion: v1
+kind: Namespace
+metadata:
+name: sandbox-lab
+labels:
+env: sandbox
+track: misc
+owner: zidane
