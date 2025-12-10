@@ -1,0 +1,401 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+name: lab-admin
+rules:
+
+* apiGroups: ["", "apps", "batch", "route.openshift.io"]
+  resources: ["pods", "services", "configmaps", "secrets", "persistentvolumeclaims", "deployments", "replicasets", "statefulsets", "daemonsets", "jobs", "cronjobs", "routes"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+* apiGroups: [""]
+  resources: ["pods/log", "events"]
+  verbs: ["get", "list", "watch"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+name: lab-dev
+rules:
+
+* apiGroups: ["", "apps", "batch", "route.openshift.io"]
+  resources: ["pods", "services", "configmaps", "secrets", "persistentvolumeclaims", "deployments", "replicasets", "jobs", "cronjobs", "routes"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+* apiGroups: [""]
+  resources: ["pods/log", "events"]
+  verbs: ["get", "list", "watch"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+name: lab-ops
+rules:
+
+* apiGroups: ["", "apps", "batch"]
+  resources: ["pods", "pods/log", "services", "deployments", "replicasets", "statefulsets", "daemonsets", "jobs", "cronjobs"]
+  verbs: ["get", "list", "watch"]
+* apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets", "daemonsets"]
+  verbs: ["update", "patch"]
+
+---
+
+# RoleBindings pour chaque namespace de lab
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-admin-binding
+namespace: ex280-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-admins
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-admin
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-dev-binding
+namespace: ex280-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-devs
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-dev
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-ops-binding
+namespace: ex280-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-ops
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-ops
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-admin-binding
+namespace: ex288-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-admins
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-admin
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-dev-binding
+namespace: ex288-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-devs
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-dev
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-ops-binding
+namespace: ex288-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-ops
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-ops
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-admin-binding
+namespace: ex370-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-admins
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-admin
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-dev-binding
+namespace: ex370-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-devs
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-dev
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-ops-binding
+namespace: ex370-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-ops
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-ops
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-admin-binding
+namespace: ex380-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-admins
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-admin
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-dev-binding
+namespace: ex380-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-devs
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-dev
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-ops-binding
+namespace: ex380-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-ops
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-ops
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-admin-binding
+namespace: ex480-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-admins
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-admin
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-dev-binding
+namespace: ex480-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-devs
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-dev
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-ops-binding
+namespace: ex480-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-ops
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-ops
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-admin-binding
+namespace: ex482-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-admins
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-admin
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-dev-binding
+namespace: ex482-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-devs
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-dev
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-ops-binding
+namespace: ex482-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-ops
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-ops
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-admin-binding
+namespace: sandbox-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-admins
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-admin
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-dev-binding
+namespace: sandbox-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-devs
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-dev
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+name: lab-ops-binding
+namespace: sandbox-lab
+subjects:
+
+* kind: Group
+  apiGroup: rbac.authorization.k8s.io
+  name: ocp-lab-ops
+  roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: lab-ops
